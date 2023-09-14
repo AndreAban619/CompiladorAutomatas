@@ -1,0 +1,6 @@
+rea_ ISC_132 , ISC_342
+cad_ ISC_654 ;
+ent_ ISC_666 ;
+ISC_666 = 4064 ;
+ISC_132 = 454 ;
+ISC_132 = ISC_666 + ISC_344 ;
