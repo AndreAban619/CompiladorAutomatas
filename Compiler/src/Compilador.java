@@ -1,20 +1,13 @@
 
 import com.formdev.flatlaf.FlatIntelliJLaf;
-import com.formdev.flatlaf.util.SystemInfo;
-import com.sun.jdi.event.EventIterator;
-import java.util.Arrays;
-import compilerTools.CodeBlock;
-import java.util.stream.IntStream;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import compilerTools.Directory;
 import compilerTools.ErrorLSSL;
 import compilerTools.Functions;
-import compilerTools.Grammar;
 import compilerTools.Production;
 import compilerTools.TextColor;
 import compilerTools.Token;
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -34,7 +27,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
-import utils.Simbolo;
 
 public class Compilador extends javax.swing.JFrame {
 
@@ -42,7 +34,6 @@ public class Compilador extends javax.swing.JFrame {
     private Directory directorio;
     private ArrayList<Token> tokens;
     private ArrayList<ErrorLSSL> errors;
-     ArrayList<Simbolo> listaSimbolos;
     private ArrayList<TextColor> textsColor;
     private Timer timerKeyReleased;
     private ArrayList<Production> identProd, identProd1, identProd2;
@@ -55,7 +46,10 @@ public class Compilador extends javax.swing.JFrame {
     int[] LINEA = new int[2000];
     int[] COLUMNA = new int[2000];
 
-    String GENERAL[][] = new String[2000][2000];
+    ///Cadena que copia el lexema con su linea
+    String Tokenpos[][] = new String[2000][2000];
+    //obtiene el valor de arriab
+    String CopyTokenpos[][] = new String[2000][2000];
     //  String[] GENERAL = new String[2000];
     ArrayList<String> list = new ArrayList<String>();
     String[] ERROR = new String[2000];
@@ -64,7 +58,7 @@ public class Compilador extends javax.swing.JFrame {
     String[] REAL = new String[2000];
      String[] INFOX = new String[2000];
      String[] INFOX2 = new String[2000];
-        String ALEX[][] = new String[2000][2000];
+        
         String ALEXESPEJO[][] = new String[2000][2000];
      String[] IDENTI1 = new String[2000];
      String[] IDENTI2 = new String[2000];
@@ -74,34 +68,35 @@ public class Compilador extends javax.swing.JFrame {
     String Lexem, TOKE;
     int LINE, COLUMN;
 
+    
+    //// función que llama la funcion para la creación de la ventana
     public Compilador() {
-        initComponents();
-        init();
+        initComponents(); //inicializamo los componentes
+        init();   //inicializamos la ventana
     }
 
+    
+    //función para inicializar ventana
     private void init() {
-        title = "Compilador";//nombre del compilador
+        title = "Compilador Equipo. 4";//nombre del compilador
         setLocationRelativeTo(null);//centrar ventana
-        setTitle(title);
-        directorio = new Directory(this, jtpCode, title, ".andre");//el ultimo es la extensin que tendran nuestros archivos; este es el directorio
+        setTitle(title); //enviarle el titulo
+        directorio = new Directory(this, jtpCode, title, ".andre");//guarda nuestros documentos con esta extensión.
         addWindowListener(new WindowAdapter() {// Cuando presiona la "X" de la esquina superior derecha
             @Override
             public void windowClosing(WindowEvent e) {
-                directorio.Exit();//pregunta si se guardan o descratan los cambios
+                directorio.Exit();//pregunta si se guardan o descartan los cambios
                 System.exit(0); //salir
             }
         });
 
+        
         Functions.setLineNumberOnJTextComponent(jtpCode);//en el editor se muestran los numeros de linea
-        timerKeyReleased = new Timer((int) (1000 * 0.3), (ActionEvent e) -> { // se colorean las palabras
-            timerKeyReleased.stop();//se detiene el timer
-            colorAnalysis();
-        });
-
         Functions.insertAsteriskInName(this, jtpCode, () -> {//pone un asterisco cada que editemos 
             timerKeyReleased.restart();//se llama al metodo
         });
-
+        
+        
         // se inicializan las arrays
         tokens = new ArrayList<>();
         errors = new ArrayList<>();
@@ -110,10 +105,6 @@ public class Compilador extends javax.swing.JFrame {
         identProd1 = new ArrayList<>();
         identProd2 = new ArrayList<>();
         identificadores = new HashMap<>();
-//autocompletar
-        Functions.setAutocompleterJTextComponent(new String[]{"ent_", "cad_", "dcm_", "if", "ISC_", "666"}, jtpCode, () -> { //meter autocomplementador con ctrl+space
-            timerKeyReleased.restart();
-        });
     }
 
     @SuppressWarnings("unchecked")
@@ -335,25 +326,24 @@ public class Compilador extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        directorio.New();
+        directorio.New(); //crear un directorio
         clearFields();//LIMPIAR
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbrirActionPerformed
-        if (directorio.Open()) {
-            colorAnalysis();
+        if (directorio.Open()) { //abrir un directorio
             clearFields();
         }
     }//GEN-LAST:event_btnAbrirActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        if (directorio.Save()) {
+        if (directorio.Save()) { ///guardar
             clearFields();
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnGuardarCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCActionPerformed
-        if (directorio.SaveAs()) {
+        if (directorio.SaveAs()) {  ///guardar como
             clearFields();
         }
     }//GEN-LAST:event_btnGuardarCActionPerformed
@@ -361,7 +351,7 @@ public class Compilador extends javax.swing.JFrame {
     private void btnCompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompilarActionPerformed
         if (getTitle().contains("*") || getTitle().equals(title)) {
             if (directorio.Save()) {
-                compile();
+                compile(); // el boton compilar ejecuta la funcion compile
             }
         } else {
             compile();
@@ -380,7 +370,7 @@ public class Compilador extends javax.swing.JFrame {
     }
 
     private void lexicalAnalysis() {
-        // Extraer tokens
+        // Extraer los lexemas
 
         //int cont= 0;
         Lexer lexer;
@@ -393,7 +383,7 @@ public class Compilador extends javax.swing.JFrame {
             BufferedReader entrada = new BufferedReader(new InputStreamReader(new FileInputStream(codigo), "UTF8"));
             lexer = new Lexer(entrada);
             while (true) {
-                Token token = lexer.yylex();//retorna tokens hasta null
+                Token token = lexer.yylex();//retorna tokens hasta null en el panel de entrada
 
                 if (token == null) {
                     break;
@@ -403,7 +393,8 @@ public class Compilador extends javax.swing.JFrame {
                 //   cont++;
             }
             // System.out.println("ffff"+tokens.toString());
-            Lexem = tokens.toString(); // copio los datos a mi cadena a analizar
+            Lexem = tokens.toString(); // copio los datos a mi cadena para analizar
+            System.out.println(Lexem); //  el lexem guarda las variable a analizar
 
         } catch (FileNotFoundException ex) {
             System.out.println("El archivo no pudo ser encontrado... " + ex.getMessage());
@@ -418,39 +409,9 @@ public class Compilador extends javax.swing.JFrame {
 
     private void semanticAnalysis() {
     }
-
-    private void colorAnalysis() {
-        /* Limpiar el arreglo de colores */
-        textsColor.clear();
-        /* Extraer rangos de colores */
-        LexerColor lexerColor;
-        try {
-            File codigo = new File("color.encrypter");
-            FileOutputStream output = new FileOutputStream(codigo);
-            byte[] bytesText = jtpCode.getText().getBytes();
-            output.write(bytesText);
-            BufferedReader entrada = new BufferedReader(new InputStreamReader(new FileInputStream(codigo), "UTF8"));
-            lexerColor = new LexerColor(entrada);
-            while (true) {
-                TextColor textColor = lexerColor.yylex();
-                if (textColor == null) {
-                    break;
-                }
-                textsColor.add(textColor);
-            }
-        } catch (FileNotFoundException ex) {
-            System.out.println("El archivo no pudo ser encontrado... " + ex.getMessage());
-        } catch (IOException ex) {
-            System.out.println("Error al escribir en el archivo... " + ex.getMessage());
-        }
-
-        Functions.colorTextPane(textsColor, jtpCode, new Color(40, 40, 40));//color negro
-    }
-
-    private void fillTableTokens() { ///////aqui estoy mandando los tokensz
+    private void fillTableTokens() { ///////LLenando la tabla de simbolos
         tamañote = tokens.size();
         tokens.forEach(token -> {
-
             TOKE = token.getLexicalComp();
             TOKEN[cont1] = TOKE;
             Lexem = token.getLexeme();
@@ -473,9 +434,9 @@ public class Compilador extends javax.swing.JFrame {
         for (int i = 0; i < tamañote; i++) {
 
             if (LINEA[i] == numlin) {
-                GENERAL[nume][nume2] = Lexema[i];///se guarda el valor del lexema en la posicion
-               ALEX[nume][nume2]=GENERAL[nume][nume2] ;
-                //  System.out.print("Dato guardado: "+ GENERAL[nume][nume2]);
+                Tokenpos[nume][nume2] = Lexema[i];///se guarda el valor del lexema en la posicion
+               CopyTokenpos[nume][nume2]=Tokenpos[nume][nume2] ;
+                //System.out.print("Dato guardado: "+ Tokenpos[nume][nume2]);
                 //System.out.print(" x: "+nume+"y: "+nume2+" NUMLIN: "+numlin+" i: "+i);
                 //System.out.println(" ");
                 nume2++;
@@ -486,166 +447,55 @@ public class Compilador extends javax.swing.JFrame {
                 i = i - 1;
             }
         }
-        ////////Cambiar el tipo
+        ////////Cambiar el tipo de declaración
         ////////////////////////////////////////////// Primera declaracion
-        for (int i = 0; GENERAL[0][i] != null; i++) {
+        for (int i = 0; Tokenpos[0][i] != null; i++) {
             for (int j = 0; TOKEN[j] != null; j++) {
                 if (TOKEN[j] == "IDENTIFICADOR") {
-                    if (Lexema[j] == GENERAL[0][i]) {
-                        TOKEN[j] = GENERAL[0][0];
-                        // System.out.println( "DAT: "+TOKEN[j]+ Lexema[j]+ LINEA[j]+ COLUMNA[j]);
-                        //   System.out.println( "daton: "+GENERAL[0][i]);//PRIMERA DECLARACION 
+                    if (Lexema[j] == Tokenpos[0][i]) {
+                        TOKEN[j] = Tokenpos[0][0];
+                         //System.out.println( "DAT: "+TOKEN[j]+ Lexema[j]+ LINEA[j]+ COLUMNA[j]);
+                        //System.out.println( "daton: "+Tokenpos[0][i]);//PRIMERA DECLARACION 
                     }
                 }
             }
         }
+        ////////////////////////////////////////////
+        
         //////////////////////////////////////////////      
         ////////////////////////////////////////////// Segunda declaracion
-        for (int i = 0; GENERAL[1][i] != null; i++) {
+       
+        for (int i = 0; Tokenpos[1][i] != null; i++) {
             for (int j = 0; TOKEN[j] != null; j++) {
                 if (TOKEN[j] == "IDENTIFICADOR") {
-                    if (Lexema[j] == GENERAL[1][i]) {
-                        TOKEN[j] = GENERAL[1][0];
-                        // System.out.println( "DAT: "+TOKEN[j]+ Lexema[j]+ LINEA[j]+ COLUMNA[j]);
-                        //   System.out.println( "daton: "+GENERAL[0][i]);//PRIMERA DECLARACION 
+                    if (Lexema[j] == Tokenpos[1][i]) {
+                        TOKEN[j] = Tokenpos[1][0];
+                        //System.out.println( "DAT: "+TOKEN[j]+ Lexema[j]+ LINEA[j]+ COLUMNA[j]);
+                          //System.out.println( "daton: "+Tokenpos[1][i]);//PRIMERA DECLARACION 
                     }
                 }
             }
         }
         //////////////////////////////////////////////   
         ////////////////////////////////////////////// Tercera declaracion
-        for (int i = 0; GENERAL[2][i] != null; i++) {
+        for (int i = 0; Tokenpos[2][i] != null; i++) {
             for (int j = 0; TOKEN[j] != null; j++) {
                 if (TOKEN[j] == "IDENTIFICADOR") {
-                    if (Lexema[j] == GENERAL[2][i]) {
-                        TOKEN[j] = GENERAL[2][0];
-                        // System.out.println( "DAT: "+TOKEN[j]+ Lexema[j]+ LINEA[j]+ COLUMNA[j]);
-                        //   System.out.println( "daton: "+GENERAL[0][i]);//PRIMERA DECLARACION 
+                    if (Lexema[j] == Tokenpos[2][i]) {
+                        TOKEN[j] = Tokenpos[2][0];
+                        //System.out.println( "DAT: "+TOKEN[j]+ Lexema[j]+ LINEA[j]+ COLUMNA[j]);
+                        //System.out.println( "daton: "+Tokenpos[2][i]);//PRIMERA DECLARACION 
                     }
                 }
             }
         }
-        ///////////////////////////////////////////// Si ya existe el dato que no me lo mande en la tabla y si no esta declarado
-
-        /////////////////////primera declaracion
-        for (int i = 0; GENERAL[0][i] != null; i++) {
-            String inf = GENERAL[0][0];
-            String igual = GENERAL[0][i];
-            String comas = "COMA";
-            String puncomas = "PUNCOMA";
-            String ine = "IDENTIFICADOR";
-            for (int j = 0; Lexema[j] != null; j++) {
-
-                String igual2 = Lexema[j];
-                if (igual != inf) {
-                    if (igual2 != inf) {
-                        if (TOKEN[j] != GENERAL[0][0])//elimina el tipo de dato primero
-                        {
-                            if (TOKEN[j] != ine) {
-                                if (TOKEN[j] != comas)//elimina la ,
-                                {
-                                    if (TOKEN[j] != puncomas)//elimina ;
-                                    {
-                                        if (igual.equals(igual2))//iguales
-                                        {
-
-                                            // System.out.println( "Son iguales1: "+igual+", "+igual2);    
-                                            ERROR[contaerror] = "              " + Lexema[j] + "             " + "Variable ya asignada     " + " " + LINEA[j];
-                                            contaerror++;
-                                              //System.out.println( "error1: "+ERROR[contaerror]);    
-                                            for (int r = 0; GENERAL[1][r] != null; r++)//cambio la segunda declaracion
-                                            {
-                                                //    System.out.println( "Generala: "+GENERAL[1][r]);
-                                                String ayudin = GENERAL[1][r];
-                                                if (ayudin.equals(igual)) {
-                                                    // System.out.println( "Generala: "+GENERAL[1][r]); 
-                                                    GENERAL[1][r] = "ESTOCOLMO2";
-                                                }
-                                            }
-                                            for (int r = 0; GENERAL[2][r] != null; r++)//cambio la terceradeclaracion
-                                            {
-                                                //System.out.println( "Generala: "+GENERAL[2][r]);
-                                                String ayudin1 = GENERAL[1][r];
-                                                if (ayudin1.equals(igual)) {
-                                                    // System.out.println( "Generala1: "+GENERAL[2][r]); 
-                                                    GENERAL[2][r] = "ESTOCOLMO3";
-                                                }
-                                            }
-                                            TOKEN[j] = "ESTOCOLMO";
-                                            Lexema[j] = "ESTOCOLMO";
-                                            LINEA[j] = 0;
-                                            COLUMNA[j] = 0;
-
-                                        }
-
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                }
-            }
-        }
-        //////////////////////////////////////////////////////////////
-
-        /////////////////////Segunda declaracion
-        for (int i = 0; GENERAL[1][i] != null; i++) {
-            String inf = GENERAL[1][0];
-            String igual = GENERAL[1][i];
-            String comas = "COMA";
-            String puncomas = "PUNCOMA";
-            String ine = "IDENTIFICADOR";
-            for (int j = 0; Lexema[j] != null; j++) {
-
-                String igual2 = Lexema[j];
-                if (igual != inf) {
-                    if (igual2 != inf) {
-                        if (TOKEN[j] != GENERAL[1][0])//elimina el tipo de dato primero
-                        {
-                            if (TOKEN[j] != ine) {
-                                if (TOKEN[j] != comas)//elimina la ,
-                                {
-                                    if (TOKEN[j] != puncomas)//elimina ;
-                                    {    
-                                        if (igual.equals(igual2))//iguales
-                                        {
-
-                                            //System.out.println( "Son iguales1: "+igual+", "+igual2);    
-                                            ERROR[contaerror] = "              " + Lexema[j] + "             " + "Variable ya asignada     " + " " + LINEA[j];
-                                            contaerror++;
- 
-                                            for (int r = 0; GENERAL[2][r] != null; r++)//cambio la segunda declaracion
-                                            {
-                                                //   System.out.println( "Generala: "+GENERAL[2][r]);
-                                                String ayudin = GENERAL[2][r];
-                                                if (ayudin.equals(igual)) {
-                                                    // System.out.println( "Generala: "+GENERAL[2][r]); 
-                                                    GENERAL[2][r] = "ESTOCOLMO4";
-                                                }
-                                            }
-                                            TOKEN[j] = "ESTOCOLMO";
-                                            Lexema[j] = "ESTOCOLMO";
-                                            LINEA[j] = 0;
-                                            COLUMNA[j] = 0;
-
-                                        }
-
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                }
-            }
-        }
+   
         //////////////////////////////////////////////////////////////INCOMPATIBILIDAD DE TIPOS
         for (int i = 0; i < tamañote; i++) {
             linfin = LINEA[i];//Guarda la linea maxima
         }
-
-///////////////////////// guarda enteros cadena y reales
+////////////////////////////eliminar vaaribles repetidas
+///////////////////////// guarda enteros cadena y reales todos en un arreglo estos  están despues de  las declaraciones
         String enterito = "ent_";
         String cadenita = "cad_";
         String realito = "rea_";
@@ -655,10 +505,12 @@ public class Compilador extends javax.swing.JFrame {
         int o3 = 0;
         for (int i = 0; TOKEN[i] != null; i++) {
 
-            String michi = TOKEN[i];
-            if (michi.equals(enterito)) {
-                //    System.out.println("toke: "+TOKEN[i]);
-                // System.out.println("Entero: "+Lexema[i]);   
+
+            ////si el valor del lexema es entero lo guarda en una cadena perteneciente a los enteros y asi en todas
+            String compararval = TOKEN[i];
+            if (compararval.equals(enterito)) {   //compara el valor que trae el token i guardado en la cadena compararval
+                 System.out.println("toke: "+TOKEN[i]); 
+                 System.out.println("Entero: "+Lexema[i]);   
                 ENTERO[o] = Lexema[i];
                 o++;
                 // System.out.println(i+"hhh"+o);  
@@ -667,8 +519,8 @@ public class Compilador extends javax.swing.JFrame {
         }
         for (int i = 0; TOKEN[i] != null; i++) {
 
-            String michi = TOKEN[i];
-            if (michi.equals(cadenita)) {
+            String compararval = TOKEN[i];
+            if (compararval.equals(cadenita)) {
                 //
                 //System.out.println("cadenita: "+Lexema[i]);  
                 CADENA[o2] = Lexema[i];
@@ -678,19 +530,21 @@ public class Compilador extends javax.swing.JFrame {
         }
         for (int i = 0; TOKEN[i] != null; i++) {
 
-            String michi = TOKEN[i];
-            if (michi.equals(realito)) {
-                // System.out.println("toke: "+TOKEN[i]);
+            String compararval = TOKEN[i];
+            if (compararval.equals(realito)) {
+                //System.out.println("toke: "+TOKEN[i]);
                 //System.out.println("real: "+Lexema[i]); 
                 REAL[o3] = Lexema[i];
                 o3++;
             }
         }
-        //////////////////////////////////////////// comparar errores de imcomaptibilidsd
-         /////////////////////////////////////////////////////////////////////////////
-            int aron=0;
+
+        /////////////////////////////rellenar tabla si se repite no va a la tabla
+            int conta=0;
             String coma=",";
-              String forsito="for1010";
+            String IF="4if4";
+            String THEN="4then4";
+            String ELSE= "4else4";        
             String puncoma=";";
             String suma="+";
             String OPA="(";
@@ -706,6 +560,7 @@ public class Compilador extends javax.swing.JFrame {
                    String OR2="==";
                     String OR3="!=";
                     String DIVI="/";
+                    
          for (int i = 0; i < linfin; i++) //AQUUI QUITO El NULLLL
         {
              INFOX[i]=" ";
@@ -713,27 +568,24 @@ public class Compilador extends javax.swing.JFrame {
          
         for (int i = 3; i < linfin; i++) //Recorre las lineas despues de la declaracion a la ultima, guarda linea por linea
         {   
-            for (int j = 0; GENERAL[i][j] != null; j++) {
+            for (int j = 0; Tokenpos[i][j] != null; j++) {
              
-               // System.out.println("holaaas: "+GENERAL[i][j]);
-                 // ALEX[i][j] =GENERAL[i][j]; 
-                 //System.out.println("holaaas: "+ ALEX[ñ][j]);
-                //alecsito++;
-         String hola1=GENERAL[i][j];
+            //System.out.println("holaaas: "+Tokenpos[i][j]);
+               String compararToken1=Tokenpos[i][j];
                 for(int k=0;ENTERO[k]!=null;k++)
                 {
-                     String hola=ENTERO[k];
-                 
+                    String compararToken=ENTERO[k];
+                    //System.out.println("holaaas: "+compararToken);
                      ////////////Si se repite no va a tabla
                     for(int h=0;Lexema[h]!=null;h++)
                     {
                       String toki=TOKEN[h];
                            String dato="ent_";
                            
-                        String holita=Lexema[h];
+                        String holita=Lexema[h];   //en lexema están todos los simbolos
                         if(toki.equals(dato)==false)
                      {
-                          if(hola.equals(holita))
+                          if(compararToken.equals(holita))
                     {
                      
                         Lexema[h]="ESTOCOLMO";
@@ -743,12 +595,14 @@ public class Compilador extends javax.swing.JFrame {
                     }
                     ////////////////////
                    
-                    if(hola1.equals(hola))
+                    if(compararToken1.equals(compararToken))
                     {
                         //System.out.println("holaaas: "+hola+" "+hola1);
-                        GENERAL[i][j]="ENTERO";
+                        Tokenpos[i][j]="ENTERO";
                     }
                 }
+                
+                //////////////////////////////////
                 for(int k=0;CADENA[k]!=null;k++)
                 {
                     String hola=CADENA[k];
@@ -769,12 +623,13 @@ public class Compilador extends javax.swing.JFrame {
                       
                     }
                     ////////////////////
-                    if(hola1.equals(hola))
+                    if(compararToken1.equals(hola))
                     {
                         //System.out.println("holaaas: "+hola+" "+hola1);
-                        GENERAL[i][j]="CADENA";
+                        Tokenpos[i][j]="CADENA";
                     }
                 }
+                ////////////////////////////////////
                   for(int k=0;REAL[k]!=null;k++)
                 {
                     String hola=REAL[k];
@@ -795,135 +650,126 @@ public class Compilador extends javax.swing.JFrame {
                       
                     }
                     ////////////////////
-                    if(hola1.equals(hola))
+                    if(compararToken1.equals(hola))
                     {
                         //System.out.println("holaaas: "+hola+" "+hola1);
-                        GENERAL[i][j]="REAL";
+                        Tokenpos[i][j]="REAL";
                     }
                 }
-                  //////
-                    if(hola1.equals(coma))
+                  /////////////////////////////////////////////////
+                    if(compararToken1.equals(coma))
                     {
                         //System.out.println("holaaas: "+hola+" "+hola1);
-                        GENERAL[i][j]="COMA";
+                        Tokenpos[i][j]="COMA";
                     }
-                    if(hola1.equals(DIVI))
+                    if(compararToken1.equals(DIVI))
                     {
                         //System.out.println("holaaas: "+hola+" "+hola1);
-                        GENERAL[i][j]="DIVI";
+                        Tokenpos[i][j]="DIVI";
                     }
-                      if(hola1.equals(puncoma))
+                      if(compararToken1.equals(puncoma))
                     {
                         //System.out.println("holaaas: "+hola+" "+hola1);
-                        GENERAL[i][j]="PUNCOMA";
+                        Tokenpos[i][j]="PUNCOMA";
                     }
-                            if(hola1.equals(suma))
+                            if(compararToken1.equals(suma))
                     {
                         //System.out.println("holaaas: "+hola+" "+hola1);
-                        GENERAL[i][j]="SUMA";
+                        Tokenpos[i][j]="SUMA";
                     }
-                                     if(hola1.equals(menos))
+                                     if(compararToken1.equals(menos))
                     {
                         //System.out.println("holaaas: "+hola+" "+hola1);
-                        GENERAL[i][j]="RESTA";
+                        Tokenpos[i][j]="RESTA";
                     }
-                                  if(hola1.equals(OPA))
+                                  if(compararToken1.equals(OPA))
                     {
                         //System.out.println("holaaas: "+hola+" "+hola1);
-                        GENERAL[i][j]="PARENTESISA";
+                        Tokenpos[i][j]="PARENTESISA";
                     }
-                                        if(hola1.equals(OPC))
+                                        if(compararToken1.equals(OPC))
                     {
                         //System.out.println("holaaas: "+hola+" "+hola1);
-                        GENERAL[i][j]="PARENTESISC";
+                        Tokenpos[i][j]="PARENTESISC";
                     }
-                   if(hola1.equals(CORA))
+                   if(compararToken1.equals(CORA))
                     {
                         //System.out.println("holaaas: "+hola+" "+hola1);
-                        GENERAL[i][j]="LLAVEA";
+                        Tokenpos[i][j]="LLAVEA";
                     }
-                    if(hola1.equals(CORC))
+                    if(compararToken1.equals(CORC))
                     {
                         //System.out.println("holaaas: "+hola+" "+hola1);
-                        GENERAL[i][j]="LLAVEC";
+                        Tokenpos[i][j]="LLAVEC";
                     }
-                     if(hola1.equals(IGUA))
+                     if(compararToken1.equals(IGUA))
                     {
                         //System.out.println("holaaas: "+hola+" "+hola1);
-                        GENERAL[i][j]="OPASIGNACION";
+                        Tokenpos[i][j]="OPASIGNACION";
                     }
-                      if(hola1.equals(MAIGUA))
+                      if(compararToken1.equals(MAIGUA))
                     {
                         //System.out.println("holaaas: "+hola+" "+hola1);
-                        GENERAL[i][j]="MAYORIGU";
-                    } if(hola1.equals(MEIGUA))
+                        Tokenpos[i][j]="MAYORIGU";
+                    } if(compararToken1.equals(MEIGUA))
                     {
                         //System.out.println("holaaas: "+hola+" "+hola1);
-                        GENERAL[i][j]="MENORIGU";
+                        Tokenpos[i][j]="MENORIGU";
                     }
                    
-                      if(hola1.equals(YY))
+                      if(compararToken1.equals(YY))
                     {
                         //System.out.println("holaaas: "+hola+" "+hola1);
-                        GENERAL[i][j]="YYY";
+                        Tokenpos[i][j]="YYY";
                     }
-                       if(hola1.equals(OR))
+                       if(compararToken1.equals(OR))
                     {
                         //System.out.println("holaaas: "+hola+" "+hola1);
-                        GENERAL[i][j]="TAMBIEN";
+                        Tokenpos[i][j]="TAMBIEN";
                     }
                       
-                        if(hola1.equals(OR2))
+                        if(compararToken1.equals(OR2))
                     {
                         //System.out.println("holaaas: "+hola+" "+hola1);
-                        GENERAL[i][j]="IGUALQUE";
+                        Tokenpos[i][j]="IGUALQUE";
                     }
-                              if(hola1.equals(OR3))
+                              if(compararToken1.equals(OR3))
                     {
                         //System.out.println("holaaas: "+hola+" "+hola1);
-                        GENERAL[i][j]="DIFERENTE";
+                        Tokenpos[i][j]="DIFERENTE";
                     }
-                                         if(hola1.equals(forsito))
+                                         if(compararToken1.equals(IF))
                     {
                         //System.out.println("holaaas: "+hola+" "+hola1);
-                        GENERAL[i][j]="FOR";
+                        Tokenpos[i][j]="if";
                     }
                                          
-                               if(hola1.equals(forsito))
+                               if(compararToken1.equals(THEN))
                     {
                         //System.out.println("holaaas: "+hola+" "+hola1);
-                        GENERAL[i][j]="FOR";
-                    }         
+                        Tokenpos[i][j]="then";
+                    }    
+                               if(compararToken1.equals(ELSE))
+                    {
+                        //System.out.println("holaaas: "+hola+" "+hola1);
+                        Tokenpos[i][j]="else";
+                    } 
+                   
                                //////////////////////////////
-     Pattern pat = Pattern.compile(".*1010*");
-     Matcher mat = pat.matcher(hola1);                                                                           
+    /* Pattern pat = Pattern.compile(".*1010*");
+     Matcher mat = pat.matcher(compararToken1);                                                                           
      if (mat.matches()) {
-          GENERAL[i][j]="IDENTIFICADORNUM"; 
+          Tokenpos[i][j]="IDENTIFICADORNUM"; 
      } else {
-        // System.out.println("NO");                                                                                
-     }
-     ////////////////////////////////////
-    /*   Pattern pat1 = Pattern.compile(".*.1010*");
-     Matcher mat1 = pat1.matcher(hola1);                                                                           
-     if (mat1.matches()) {
-          GENERAL[i][j]="IDENTIFICosiADORNUM"; 
-     } else {
-        // System.out.println("NO");                                                                                
+        //                                                                                
      }*/
      //////////////////////////////////
-           //ALEXESPEJO[alecsito][j]=GENERAL[i][j];
-           INFOX[aron]= INFOX[aron] +" "+GENERAL[i][j];  //SE CONCATENA Y GUARDA LINEA POR LINEA
-           
+           INFOX[conta]= INFOX[conta] +" "+Tokenpos[i][j];  //SE CONCATENA Y GUARDA LINEA POR LINEA
+           System.out.println("aqui:   " + INFOX[conta]);  //contiene la tabla traducida 
             }
-             aron++;           
+             conta++;           
         }
-        //////////////////////////////////aL FIN
-        /*
- 
-
-        
-
-        */
+        //////////////////////////////////
         //////////////////Declaracion de errores (AGREGARLE EL IDENTINUM Y IDENTIDEC CON LAS CADENAS Y LO NUEVO)
           ////asignacion  
         String erroniocadena2[] = {
@@ -1218,13 +1064,13 @@ public class Compilador extends javax.swing.JFrame {
         }
         ///////////////////////////
   /////////////////Empezando el if////////////////////////////
-  for(int i =3;ALEX[i][0]!=null;i++)
+  for(int i =3;CopyTokenpos[i][0]!=null;i++)
   {
-      for(int j =0; ALEX[i][j]!=null; j++)
+      for(int j =0; CopyTokenpos[i][j]!=null; j++)
       {
-          String infor=ALEX[i][j];
+          String infor=CopyTokenpos[i][j];
     
-        INFOX2[aron2]= INFOX2[aron2] +" "+ALEX[i][j];  //SE CONCATENA Y GUARDA LINEA POR LINEA
+        INFOX2[aron2]= INFOX2[aron2] +" "+CopyTokenpos[i][j];  //SE CONCATENA Y GUARDA LINEA POR LINEA
    
           //System.out.print(ALEX[i][j]);
       }

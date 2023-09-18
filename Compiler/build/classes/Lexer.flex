@@ -22,15 +22,17 @@ ComentarioDeDocumentacion = "/**" {ContenidoComentario} "*"+ "/"
 /* Comentario */
 Comentario = {ComentarioTradicional} | {FinDeLineaComentario} | {ComentarioDeDocumentacion}
 /* Identificador */
-Letra = [A-Za-zÑñ_ÁÉÍÓÚáéíóúÜü]
+Letra = [A-Za-z_ÑñÁÉÍÓÚáéíóúÜü]
+String = "\"" [^\"]* "\""
+Palabra = {Letra}+
 Digito = [0-9]
+Numero = [0-9][0-9]*
 Identificador = ({Digito}{Digito}{Digito})
 Ident= "ISC_"{Identificador}
-Identnum="4"{Numero}"4"
-Identdec={Numero}".4"{Numero}"4"
+Identnum= "4"{Numero}"4"
+Identdec= {Numero}".4"{Numero}"4"
 
-/* Número */
-Numero = 0 | [1-9][0-9]*
+
 %%
 
 /* Comentarios o espacios en blanco */
@@ -39,16 +41,18 @@ Numero = 0 | [1-9][0-9]*
 /*EMPEZAMOS*/
 
 /* Identificadormio */
-("{Letra}") {return token(yytext(), "Cadena", yyline, yycolumn);}
+{String} {return token(yytext(), "cad_", yyline, yycolumn);}
 {Ident} {return token(yytext(), "IDENTIFICADOR", yyline, yycolumn);}
-{Identnum} {return token(yytext(), "IDENTIFICADORNUM", yyline, yycolumn);}
-{Identdec} {return token(yytext(), "IDENTIFICADORDEC", yyline, yycolumn);}
+{Identnum} {return token(yytext(), "ent_", yyline, yycolumn);}
+{Identdec} {return token(yytext(), "rea_", yyline, yycolumn);}
+
 
 /*Tipos de datos*/
+"ent_ " {return token(yytext(), "ENTERO", yyline, yycolumn);}
+"cad_ " {return token(yytext(), "CADENA", yyline, yycolumn);}
+"rea_ " {return token(yytext(), "REAL", yyline, yycolumn);}
 
-"ent_" {return token(yytext(), "ENTERO", yyline, yycolumn);}
-"cad_" {return token(yytext(), "CADENA", yyline, yycolumn);}
-"rea_" {return token(yytext(), "REAL", yyline, yycolumn);}
+
 
 
 /*Operadores de agrupacion*/
@@ -83,14 +87,18 @@ Numero = 0 | [1-9][0-9]*
 "4if4" {return token(yytext(), "if", yyline, yycolumn);}
 "4then4" {return token(yytext(), "then", yyline, yycolumn);}
 "4else4" {return token(yytext(), "else", yyline, yycolumn);}
+
 /*OPERADORES LOGICOS*/
 "&"|"|" {return token(yytext(), "OPLOGICO", yyline, yycolumn);}
+
 /*FINAL*/
 /*"FIN" {return token(yytext(), "FINAL", yyline, yycolumn);}*/
+
 /*ERRORES*/
 {Numero} {return token(yytext(), "Nodefinido", yyline, yycolumn);}
-{Identificador} {return token(yytext(), "Nodefinido", yyline, yycolumn);}
 ({Numero}"."{Numero}) {return token(yytext(), "Nodefinido", yyline, yycolumn);}
+({Letra} | {Digito})* {return token(yytext(), "Nodefinido", yyline, yycolumn);}
+{Palabra} {return token(yytext(), "Nodefinido", yyline, yycolumn);}
 
 /*retorna los valores en char*/
 
