@@ -420,7 +420,15 @@ public class Compilador extends javax.swing.JFrame {
             LINEA[cont1] = LINE;
             COLUMN = token.getColumn();
             COLUMNA[cont1] = COLUMN;
+       
+             if(TOKEN[cont1]== "Nodefinido")  //Guarda las variables que no están definidas y las elimina
+             {
                                  
+               ERROR[contaerror]= Lexema[cont1]+"           Indefinida la variable              " + " " + LINEA[cont1];
+               contaerror++;
+               Lexema[cont1]=" ";//dejarlo en ¿lexema? por que no aparece en la tabla de simbolos
+               //System.out.print(ERROR[contaerror]);
+             }
             // Object[] data = new Object[]{TOKE,Lexem, "[" + LINE + ", " + COLUMN + "]"};
             //Functions.addRowDataInTable(tblTokens, data);
             cont1++;
@@ -770,32 +778,31 @@ public class Compilador extends javax.swing.JFrame {
              conta++;           
         }
         //////////////////////////////////
-        //////////////////Declaracion de errores (AGREGARLE EL IDENTINUM Y IDENTIDEC CON LAS CADENAS Y LO NUEVO)
-          ////asignacion  
-        String erroniocadena2[] = {
+        //////////////////Declaracion de Reglas
+        
+          ////Reglas de asignacion  
+        String cadena2[] = {
         "  CADENA OPASIGNACION ENTERO PUNCOMA",
         "  CADENA OPASIGNACION REAL PUNCOMA",
-        "  CADENA OPASIGNACION IDENTIFICADORNUM PUNCOMA",
-        
-            
+       // "  CADENA OPASIGNACION IDENTIFICADORNUM PUNCOMA",        
         };
-                String erronioreal2[] = {   
-         "  REAL OPASIGNACION CADENA PUNCOMA",
+                String real2[] = {   
+        "  REAL OPASIGNACION CADENA PUNCOMA",
         };
-         String erronioentero2[] = {
-         "  ENTERO OPASIGNACION REAL PUNCOMA",
-          "  ENTERO OPASIGNACION CADENA PUNCOMA",      
+         String entero2[] = {
+        "  ENTERO OPASIGNACION REAL PUNCOMA",
+        "  ENTERO OPASIGNACION CADENA PUNCOMA",        
                   };
-       /////////////////////////////////////// 
-        String erroniocadena[] = {
+       /////////////////Reglas Arimeticas////////////////////// 
+        String cadena[] = {
         "  CADENA OPASIGNACION REAL SUMA CADENA PUNCOMA",
         "  CADENA OPASIGNACION CADENA SUMA REAL PUNCOMA",
         "  CADENA OPASIGNACION ENTERO SUMA CADENA PUNCOMA",
         "  CADENA OPASIGNACION CADENA SUMA ENTERO PUNCOMA",
-       "  CADENA OPASIGNACION CADENA SUMA IDENTIFICADORNUM PUNCOMA",
-       "  CADENA OPASIGNACION IDENTIFICADORNUM SUMA CADENA PUNCOMA",
+        //"  CADENA OPASIGNACION CADENA SUMA IDENTIFICADORNUM PUNCOMA",
+        //"  CADENA OPASIGNACION IDENTIFICADORNUM SUMA CADENA PUNCOMA",
         
-         "  CADENA OPASIGNACION REAL RESTA CADENA PUNCOMA",
+        "  CADENA OPASIGNACION REAL RESTA CADENA PUNCOMA",
         "  CADENA OPASIGNACION CADENA RESTA REAL PUNCOMA",
         "  CADENA OPASIGNACION ENTERO RESTA CADENA PUNCOMA",
         "  CADENA OPASIGNACION CADENA RESTA ENTERO PUNCOMA",
@@ -805,40 +812,43 @@ public class Compilador extends javax.swing.JFrame {
         "  CADENA OPASIGNACION ENTERO DIVI CADENA PUNCOMA",
         "  CADENA OPASIGNACION CADENA DIVI ENTERO PUNCOMA",
         };
-                String erronioreal[] = {
+                String real[] = {
         "  REAL OPASIGNACION CADENA SUMA REAL PUNCOMA",
         "  REAL OPASIGNACION REAL SUMA CADENA PUNCOMA",
         
-         "  REAL OPASIGNACION CADENA RESTA REAL PUNCOMA",
+        "  REAL OPASIGNACION CADENA RESTA REAL PUNCOMA",
         "  REAL OPASIGNACION REAL RESTA CADENA PUNCOMA",
         
-         "  REAL OPASIGNACION CADENA DIVI REAL PUNCOMA",
+        "  REAL OPASIGNACION CADENA DIVI REAL PUNCOMA",
         "  REAL OPASIGNACION REAL DIVI CADENA PUNCOMA",
+        
+ 
       
         };
-       String erronioentero[] = {
-         "  ENTERO OPASIGNACION ENTERO SUMA CADENA PUNCOMA",
+       String entero[] = {
+        "  ENTERO OPASIGNACION ENTERO SUMA CADENA PUNCOMA",
         "  ENTERO OPASIGNACION CADENA SUMA ENTERO PUNCOMA",
         
-           "  ENTERO OPASIGNACION ENTERO RESTA CADENA PUNCOMA",
+        "  ENTERO OPASIGNACION ENTERO RESTA CADENA PUNCOMA",
         "  ENTERO OPASIGNACION CADENA RESTA ENTERO PUNCOMA",
         
-          "  ENTERO OPASIGNACION ENTERO DIVI CADENA PUNCOMA",
+        "  ENTERO OPASIGNACION ENTERO DIVI CADENA PUNCOMA",
         "  ENTERO OPASIGNACION CADENA DIVI ENTERO PUNCOMA",
         };
         ///////////////////
-           for (int j = 0; j<erroniocadena2.length; j++) {
+           for (int j = 0; j<cadena2.length; j++) {
            
-               String inco=erroniocadena2[j];
-              // System.out.println("aquisito "+erronio[j]);
+               String inco=cadena2[j]; //guarda las reglas en una variable para despues comparar
+               System.out.println("aquisito "+inco);
+               
                for (int i = 0; INFOX[i] != null; i++) {
                 String inc= INFOX[i];
-                   //System.out.println("ito "+inc1+"   vbdkdbj  "+inco);
+                System.out.println("ito"+inc+"   vbdkdb"+inco);
                  if(inco.equals(inc))
                         {
                                //.out.println("aquisitoxfffsvr ");
                                int osi=i+4;
-                            ERROR[contaerror]="ERROR DE ASIGNACIÓN, TIPO ARY#     " + " " +osi;
+                            ERROR[contaerror]="Incompatibilidad de tipos de tipo cad_     " + " " +osi;
                             contaerror++;
                         }
            }
@@ -846,9 +856,9 @@ public class Compilador extends javax.swing.JFrame {
     }
          ///////////////////////////////////  
             ///////////////////
-           for (int j = 0; j<erronioreal2.length; j++) {
+           for (int j = 0; j<real2.length; j++) {
            
-               String inco=erronioreal2[j];
+               String inco=real2[j];
               // System.out.println("aquisito "+erronio[j]);
                for (int i = 0; INFOX[i] != null; i++) {
                 String inc= INFOX[i];
@@ -857,16 +867,16 @@ public class Compilador extends javax.swing.JFrame {
                         {
                               
                                int osi=i+4;
-                            ERROR[contaerror]="ERROR DE ASIGNACIÓN, TIPO DCM#     " + " " +osi;
+                            ERROR[contaerror]="Incompatibilidad de tipos de tipo rea_     " + " " +osi;
                             contaerror++;
                         }
            }
     }
          /////////////////////////////////// 
          ///////////////////
-           for (int j = 0; j<erronioentero2.length; j++) {
+           for (int j = 0; j<entero2.length; j++) {
            
-               String inco=erronioentero2[j];
+               String inco=entero2[j];
               // System.out.println("aquisito "+erronio[j]);
                for (int i = 0; INFOX[i] != null; i++) {
                 String inc= INFOX[i];
@@ -875,7 +885,7 @@ public class Compilador extends javax.swing.JFrame {
                         {
                               
                                int osi=i+4;
-                            ERROR[contaerror]="ERROR DE ASIGNACIÓN, TIPO E/E#     " + " " +osi;
+                            ERROR[contaerror]="Incompatibilidad de tipos de tipo ent_     " + " " +osi;
                             contaerror++;
                         }
            }
@@ -883,9 +893,9 @@ public class Compilador extends javax.swing.JFrame {
          /////////////////////////////////// 
          ///////***************************************************************/////
             ///////////////////
-           for (int j = 0; j<erroniocadena.length; j++) {
+           for (int j = 0; j<cadena.length; j++) {
            
-               String inco=erroniocadena[j];
+               String inco=cadena[j];
               // System.out.println("aquisito "+erronio[j]);
                for (int i = 0; INFOX[i] != null; i++) {
                 String inc= INFOX[i];
@@ -894,16 +904,16 @@ public class Compilador extends javax.swing.JFrame {
                         {
                                //.out.println("aquisitoxfffsvr ");
                                int osi=i+4;
-                            ERROR[contaerror]="INCOMPATIBILIDAD DE TIPOS, TIPO ARY#     " + " " +osi;
+                            ERROR[contaerror]="Incompatibilidad de tipos de tipo cad_     " + " " +osi;
                             contaerror++;
                         }
            }
     }
          ///////////////////////////////////  
             ///////////////////
-           for (int j = 0; j<erronioreal.length; j++) {
+           for (int j = 0; j<real.length; j++) {
            
-               String inco=erronioreal[j];
+               String inco=real[j];
               // System.out.println("aquisito "+erronio[j]);
                for (int i = 0; INFOX[i] != null; i++) {
                 String inc= INFOX[i];
@@ -912,16 +922,16 @@ public class Compilador extends javax.swing.JFrame {
                         {
                               
                                int osi=i+4;
-                            ERROR[contaerror]="INCOMPATIBILIDAD DE TIPOS, TIPO DCM#     " + " " +osi;
+                            ERROR[contaerror]="Incompatibilidad de tipos de tipo rea_     " + " " +osi;
                             contaerror++;
                         }
            }
     }
          /////////////////////////////////// 
          ///////////////////
-           for (int j = 0; j<erronioentero.length; j++) {
+           for (int j = 0; j<entero.length; j++) {
            
-               String inco=erronioentero[j];
+               String inco=entero[j];
               // System.out.println("aquisito "+erronio[j]);
                for (int i = 0; INFOX[i] != null; i++) {
                 String inc= INFOX[i];
@@ -930,7 +940,7 @@ public class Compilador extends javax.swing.JFrame {
                         {
                               
                                int osi=i+4;
-                            ERROR[contaerror]="INCOMPATIBILIDAD DE TIPOS, TIPO E/E#     " + " " +osi;
+                            ERROR[contaerror]="Incompatibilidad de tipos de tipo ent_     " + " " +osi;
                             contaerror++;
                         }
            }
