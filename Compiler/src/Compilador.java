@@ -513,55 +513,40 @@ public class Compilador extends javax.swing.JFrame {
    ///////////////////////////////////////////////////////////////////////
 
 
-        //////////////////////////////////////////////////////////////INCOMPATIBILIDAD DE TIPOS
+//////////////////////////////////////////////////////////////INCOMPATIBILIDAD DE TIPOS
         for (int i = 0; i < tamañote; i++) {
             linfin = LINEA[i];//Guarda la linea maxima
         }
-////////////////////////////eliminar vaaribles repetidas
-///////////////////////// guarda enteros cadena y reales todos en un arreglo estos  están despues de  las declaraciones
-        String enterito = "ent_";
-        String cadenita = "cad_";
-        String realito = "rea_";
+///////////////////////// separa en tres arreglos losa datos de entero, cadena y real
 
-        int o = 0;
+        int o = 0; //Contadores de cada arreglos de tipo de datos
         int o2 = 0;
         int o3 = 0;
         for (int i = 0; TOKEN[i] != null; i++) {
-
-
-            ////si el valor del lexema es entero lo guarda en una cadena perteneciente a los enteros y asi en todas
-            String compararval = TOKEN[i];
-            if (compararval.equals(enterito)) {   //compara el valor que trae el token i guardado en la cadena compararval
-                // System.out.println("toke: "+TOKEN[i]); 
-                 //System.out.println("Entero: "+Lexema[i]);   
-                ENTERO[o] = Lexema[i];
+           
+            if (TOKEN[i].equals("ent_ ")||TOKEN[i].equals("ent_") ) {   //compara el valor que trae el token i guardado en la cadena compararval
+                //System.out.println("toke: "+TOKEN[i]); 
+                // System.out.println("lex: "+Lexema[i]);   
+                ENTERO[o] = Lexema[i];//todos los enteros
                 o++;
-                // System.out.println(i+"hhh"+o);  
-
             }
         }
         for (int i = 0; TOKEN[i] != null; i++) {
-
-            String compararval = TOKEN[i];
-            if (compararval.equals(cadenita)) {
-                //
-                //System.out.println("cadenita: "+Lexema[i]);  
+            if (TOKEN[i].equals("cad_ ")||TOKEN[i].equals("cad_")) {
+                //System.out.println("toke: "+TOKEN[i]); 
+               //  System.out.println("lex: "+Lexema[i]);  //todas las cadenas   
                 CADENA[o2] = Lexema[i];
                 o2++;
-                // System.out.println("toke: "+CADENA[i]);
             }
         }
         for (int i = 0; TOKEN[i] != null; i++) {
-
-            String compararval = TOKEN[i];
-            if (compararval.equals(realito)) {
+            if (TOKEN[i].equals("rea_ ")||TOKEN[i].equals("rea_")) {
                 //System.out.println("toke: "+TOKEN[i]);
                 //System.out.println("real: "+Lexema[i]); 
-                REAL[o3] = Lexema[i];
+                REAL[o3] = Lexema[i]; //todos los reales
                 o3++;
             }
         }
-
         /////////////////////////////rellenar tabla si se repite no va a la tabla
             int conta=0;
             String coma=",";
@@ -593,34 +578,18 @@ public class Compilador extends javax.swing.JFrame {
         {   
             for (int j = 0; Tokenpos[i][j] != null; j++) {
              
-            //System.out.println("holaaas: "+Tokenpos[i][j]);
+            //System.out.println("holaaas: "+Tokenpos[i][j]);   //aqui esta la cadena completa que entra
                String compararToken1=Tokenpos[i][j];
+       ///////////////////////////aqui busca las variables declaradas y crea una tabla de tokens/////////////////////////////////        
                 for(int k=0;ENTERO[k]!=null;k++)
                 {
-                    String compararToken=ENTERO[k];
-                    //System.out.println("holaaas: "+compararToken);
-                     ////////////Si se repite no va a tabla
-                    for(int h=0;Lexema[h]!=null;h++)
-                    {
-                      String toki=TOKEN[h];
-                           String dato="ent_";
-                           
-                        String holita=Lexema[h];   //en lexema están todos los simbolos
-                        if(toki.equals(dato)==false)
-                     {
-                          if(compararToken.equals(holita))
-                    {
-                     
-                        Lexema[h]="ESTOCOLMO";
-                     } 
-                    }
- 
-                    }
-                    ////////////////////
-                   
+                    String compararToken=ENTERO[k]; //recibe el valor de los enteros que existem en el programa
+                   // System.out.println("holaaas: "+compararToken);
+
                     if(compararToken1.equals(compararToken))
                     {
-                        //System.out.println("holaaas: "+hola+" "+hola1);
+                        //System.out.println("holaaas: "+compararToken1+" "+compararToken);
+                        //System.out.println("holaaas: "+Tokenpos[i][j]);
                         Tokenpos[i][j]="ENTERO";
                     }
                 }
@@ -628,52 +597,17 @@ public class Compilador extends javax.swing.JFrame {
                 //////////////////////////////////
                 for(int k=0;CADENA[k]!=null;k++)
                 {
-                    String hola=CADENA[k];
-                       ////////////Si se repite no va a tabla
-                    for(int h=0;Lexema[h]!=null;h++)
+                    String compararToken=CADENA[k];
+                    if(compararToken1.equals(compararToken))
                     {
-                      String toki=TOKEN[h];
-                           String dato="cad_";
-                        String holita=Lexema[h];
-                        if(toki.equals(dato)==false)
-                     {
-                          if(hola.equals(holita))
-                    {
-                     
-                        Lexema[h]="ESTOCOLMO";
-                     } 
-                    }
-                      
-                    }
-                    ////////////////////
-                    if(compararToken1.equals(hola))
-                    {
-                        //System.out.println("holaaas: "+hola+" "+hola1);
                         Tokenpos[i][j]="CADENA";
                     }
                 }
                 ////////////////////////////////////
                   for(int k=0;REAL[k]!=null;k++)
                 {
-                    String hola=REAL[k];
-                   ////////////Si se repite no va a tabla
-                    for(int h=0;Lexema[h]!=null;h++)
-                    {
-                      String toki=TOKEN[h];
-                           String dato="rea_";
-                        String holita=Lexema[h];
-                        if(toki.equals(dato)==false)
-                     {
-                          if(hola.equals(holita))
-                    {
-                     
-                        Lexema[h]="ESTOCOLMO";
-                     } 
-                    }
-                      
-                    }
-                    ////////////////////
-                    if(compararToken1.equals(hola))
+                    String compararToken=REAL[k];
+                    if(compararToken1.equals(compararToken))
                     {
                         //System.out.println("holaaas: "+hola+" "+hola1);
                         Tokenpos[i][j]="REAL";
@@ -779,15 +713,16 @@ public class Compilador extends javax.swing.JFrame {
                     } 
      //////////////////////////////////
            INFOX[conta]= INFOX[conta] +" "+Tokenpos[i][j];  //SE CONCATENA Y GUARDA LINEA POR LINEA
-           System.out.println("aqui:   " + INFOX[conta]);  //contiene la tabla traducida 
+           //System.out.println("aqui:" + INFOX[conta]);  //contiene la tabla traducida 
             }
              conta++;           
         }
         //////////////////////////////////
-        //////////////////Declaracion de Reglas
+        //////////////////Declaracion de errores de las reglas de asignación
         
           ////Reglas de asignacion  
         String cadena2[] = {
+        "  REAL", //    QUITARRRRRRRRRRRR
         "  CADENA OPASIGNACION ENTERO PUNCOMA",
         "  CADENA OPASIGNACION REAL PUNCOMA",
        // "  CADENA OPASIGNACION IDENTIFICADORNUM PUNCOMA",        
@@ -841,16 +776,16 @@ public class Compilador extends javax.swing.JFrame {
         "  ENTERO OPASIGNACION ENTERO DIVI CADENA PUNCOMA",
         "  ENTERO OPASIGNACION CADENA DIVI ENTERO PUNCOMA",
         };
-        ///////////////////
+        //////////CADENA ASIGNACIÓN/////////
            for (int j = 0; j<cadena2.length; j++) {
            
-               String inco=cadena2[j]; //guarda las reglas en una variable para despues comparar
-              // System.out.println("aquisito "+inco);
+               String Regla=cadena2[j]; //esta variable tiene las reglas y las compara una a una
+              // System.out.println("aquisito "+Regla);
                
                for (int i = 0; INFOX[i] != null; i++) {
-                String inc= INFOX[i];
-                //System.out.println("ito"+inc+"   vbdkdb"+inco);
-                 if(inco.equals(inc))
+                String lista= INFOX[i];
+                System.out.println("lista: "+lista+"   Regla: "+Regla);
+                 if(Regla.equals(lista))
                         {
                                //.out.println("aquisitoxfffsvr ");
                                int osi=i+4;
@@ -860,16 +795,16 @@ public class Compilador extends javax.swing.JFrame {
            }
            
     }
-         ///////////////////////////////////  
+         //////////////Real ASIGNACION/////////////////////  
             ///////////////////
            for (int j = 0; j<real2.length; j++) {
            
-               String inco=real2[j];
+               String Regla=real2[j];
               // System.out.println("aquisito "+erronio[j]);
                for (int i = 0; INFOX[i] != null; i++) {
-                String inc= INFOX[i];
-                   //System.out.println("ito "+inc1+"   vbdkdbj  "+inco);
-                 if(inco.equals(inc))
+                String lista= INFOX[i];
+                 System.out.println("ito "+lista+"   vbdkdbj  "+Regla);
+                 if(Regla.equals(lista))
                         {
                               
                                int osi=i+4;
@@ -878,16 +813,16 @@ public class Compilador extends javax.swing.JFrame {
                         }
            }
     }
-         /////////////////////////////////// 
+         //////////////ENTERO ASIGNACION///////////////////// 
          ///////////////////
            for (int j = 0; j<entero2.length; j++) {
            
-               String inco=entero2[j];
+               String Regla=entero2[j];
               // System.out.println("aquisito "+erronio[j]);
                for (int i = 0; INFOX[i] != null; i++) {
-                String inc= INFOX[i];
+                String lista= INFOX[i];
                    //System.out.println("ito "+inc1+"   vbdkdbj  "+inco);
-                 if(inco.equals(inc))
+                 if(Regla.equals(lista))
                         {
                               
                                int osi=i+4;
@@ -897,16 +832,16 @@ public class Compilador extends javax.swing.JFrame {
            }
     }
          /////////////////////////////////// 
-         ///////***************************************************************/////
+         ///////*********ARIMETICA CADENA******************************************************/////
             ///////////////////
            for (int j = 0; j<cadena.length; j++) {
            
-               String inco=cadena[j];
+               String Regla=cadena[j];
               // System.out.println("aquisito "+erronio[j]);
                for (int i = 0; INFOX[i] != null; i++) {
-                String inc= INFOX[i];
+                String lista= INFOX[i];
                    //System.out.println("ito "+inc1+"   vbdkdbj  "+inco);
-                 if(inco.equals(inc))
+                 if(Regla.equals(lista))
                         {
                                //.out.println("aquisitoxfffsvr ");
                                int osi=i+4;
@@ -915,16 +850,16 @@ public class Compilador extends javax.swing.JFrame {
                         }
            }
     }
-         ///////////////////////////////////  
+         ////////////////ARIMETICA REAL///////////////////  
             ///////////////////
            for (int j = 0; j<real.length; j++) {
            
-               String inco=real[j];
+               String Regla=real[j];
               // System.out.println("aquisito "+erronio[j]);
                for (int i = 0; INFOX[i] != null; i++) {
-                String inc= INFOX[i];
+                String lista= INFOX[i];
                    //System.out.println("ito "+inc1+"   vbdkdbj  "+inco);
-                 if(inco.equals(inc))
+                 if(Regla.equals(lista))
                         {
                               
                                int osi=i+4;
@@ -933,16 +868,16 @@ public class Compilador extends javax.swing.JFrame {
                         }
            }
     }
-         /////////////////////////////////// 
+         /////////ARIMETICA ENTERO////////////////////////// 
          ///////////////////
            for (int j = 0; j<entero.length; j++) {
            
-               String inco=entero[j];
+               String Regla=entero[j];
               // System.out.println("aquisito "+erronio[j]);
                for (int i = 0; INFOX[i] != null; i++) {
-                String inc= INFOX[i];
+                String lista= INFOX[i];
                    //System.out.println("ito "+inc1+"   vbdkdbj  "+inco);
-                 if(inco.equals(inc))
+                 if(Regla.equals(lista))
                         {
                               
                                int osi=i+4;
