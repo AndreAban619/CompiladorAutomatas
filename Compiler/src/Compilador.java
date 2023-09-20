@@ -33,41 +33,32 @@ import javax.swing.Timer;
 
 public class Compilador extends javax.swing.JFrame {
 
-    private String title;
-    private Directory directorio;
-    private ArrayList<Token> tokens;
-    private ArrayList<ErrorLSSL> errors;
-    private ArrayList<TextColor> textsColor;
+    private String title; //titulo compilador
+    private Directory directorio;//directorio para guardar
+    private ArrayList<Token> tokens; //donde se guardan nuestros tokens
+    private ArrayList<ErrorLSSL> errors; ///errores de consola
     private Timer timerKeyReleased;
-    private ArrayList<Production> identProd, identProd1, identProd2;
-    private HashMap<String, String> identificadores;
     private boolean codeHasBeenCompiled = false;
     int tamañote = 0;
 
-    String[] Lexema = new String[2000];// se guarda con el tamaño de los tokens
-    String[] TOKEN = new String[2000];
-    int[] LINEA = new int[2000];
-    int[] COLUMNA = new int[2000];
+    String[] Lexema = new String[2000];// se guarda el lexema del token
+    String[] TOKEN = new String[2000];// Aqui se guarda el token
+    int[] LINEA = new int[2000];//aqui la linea
+    int[] COLUMNA = new int[2000];//aqui en que columna esta
 
     ///Cadena que copia el lexema con su linea
     String Tokenpos[][] = new String[2000][2000];
     //obtiene el valor de arriab
     String CopyTokenpos[][] = new String[2000][2000];
     //  String[] GENERAL = new String[2000];
-    ArrayList<String> list = new ArrayList<String>();
-    String[] ERROR = new String[2000];
-    String[] ENTERO = new String[2000];
+    String[] ERROR = new String[2000]; //guarda los errores
+    String[] ENTERO = new String[2000]; ///los enteros
     String[] CADENA = new String[2000];
     String[] REAL = new String[2000];
-     String[] INFOX = new String[2000];
-     String[] INFOX2 = new String[2000];
-     String[] IDENTI1 = new String[2000];
-     String[] IDENTI2 = new String[2000];
-     String[] IDENTI3 = new String[2000];
-    String[] dato = new String[3];
-    int cont1 = 0, contaerror = 0, linfin = 0, alecsito=0, comaa=0,puncomaa=0,iguaal=0,su=0, aron2=0;
-    String Lexem, TOKE;
-    int LINE, COLUMN;
+     String[] INFOX = new String[2000]; //nos sirve para copiar los lexemas en tokenspara comparar las reglas
+    int cont1 = 0, contaerror = 0, linfin = 0; //contadores
+    String Lexem, TOKE;//cadenas para comparar
+    int LINE, COLUMN; //cadenas para revisar linea y columnas
 
     
     //// función que llama la funcion para la creación de la ventana
@@ -101,11 +92,6 @@ public class Compilador extends javax.swing.JFrame {
         // se inicializan las arrays
         tokens = new ArrayList<>();
         errors = new ArrayList<>();
-        textsColor = new ArrayList<>();
-        identProd = new ArrayList<>();
-        identProd1 = new ArrayList<>();
-        identProd2 = new ArrayList<>();
-        identificadores = new HashMap<>();
     }
 
     @SuppressWarnings("unchecked")
@@ -713,7 +699,7 @@ public class Compilador extends javax.swing.JFrame {
                     } 
      //////////////////////////////////
            INFOX[conta]= INFOX[conta] +" "+Tokenpos[i][j];  //SE CONCATENA Y GUARDA LINEA POR LINEA
-           //System.out.println("aqui:" + INFOX[conta]);  //contiene la tabla traducida 
+           System.out.println("aqui:" + INFOX[conta]);  //contiene la tabla traducida 
             }
              conta++;           
         }
@@ -722,59 +708,178 @@ public class Compilador extends javax.swing.JFrame {
         
           ////Reglas de asignacion  
         String cadena2[] = {
-        "  REAL", //    QUITARRRRRRRRRRRR
         "  CADENA OPASIGNACION ENTERO PUNCOMA",
         "  CADENA OPASIGNACION REAL PUNCOMA",
-       // "  CADENA OPASIGNACION IDENTIFICADORNUM PUNCOMA",        
+        "  CADENA OPASIGNACION ENTERO",
+        "  CADENA OPASIGNACION REAL",    
         };
                 String real2[] = {   
         "  REAL OPASIGNACION CADENA PUNCOMA",
+        "  REAL OPASIGNACION CADENA",
         };
          String entero2[] = {
         "  ENTERO OPASIGNACION REAL PUNCOMA",
-        "  ENTERO OPASIGNACION CADENA PUNCOMA",        
+        "  ENTERO OPASIGNACION CADENA PUNCOMA", 
+        "  ENTERO OPASIGNACION REAL",
+        "  ENTERO OPASIGNACION CADENA",
                   };
        /////////////////Reglas Arimeticas////////////////////// 
         String cadena[] = {
         "  CADENA OPASIGNACION REAL SUMA CADENA PUNCOMA",
         "  CADENA OPASIGNACION CADENA SUMA REAL PUNCOMA",
+        "  CADENA OPASIGNACION REAL SUMA CADENA",
+        "  CADENA OPASIGNACION CADENA SUMA REAL",
+        
         "  CADENA OPASIGNACION ENTERO SUMA CADENA PUNCOMA",
         "  CADENA OPASIGNACION CADENA SUMA ENTERO PUNCOMA",
-        //"  CADENA OPASIGNACION CADENA SUMA IDENTIFICADORNUM PUNCOMA",
-        //"  CADENA OPASIGNACION IDENTIFICADORNUM SUMA CADENA PUNCOMA",
+        "  CADENA OPASIGNACION ENTERO SUMA CADENA",
+        "  CADENA OPASIGNACION CADENA SUMA ENTERO",
         
+        "  CADENA OPASIGNACION ENTERO SUMA ENTERO PUNCOMA",
+        "  CADENA OPASIGNACION REAL SUMA REAL PUNCOMA",
+        "  CADENA OPASIGNACION REAL SUMA ENTERO PUNCOMA",
+        "  CADENA OPASIGNACION ENTERO SUMA REAL PUNCOMA",
+        "  CADENA OPASIGNACION ENTERO SUMA ENTERO",
+        "  CADENA OPASIGNACION REAL SUMA REAL",
+        "  CADENA OPASIGNACION REAL SUMA ENTERO",
+        "  CADENA OPASIGNACION ENTERO SUMA REAL",
+  
+/////////////////////////////////
         "  CADENA OPASIGNACION REAL RESTA CADENA PUNCOMA",
         "  CADENA OPASIGNACION CADENA RESTA REAL PUNCOMA",
+        "  CADENA OPASIGNACION REAL RESTA CADENA",
+        "  CADENA OPASIGNACION CADENA RESTA REAL",
+        
         "  CADENA OPASIGNACION ENTERO RESTA CADENA PUNCOMA",
         "  CADENA OPASIGNACION CADENA RESTA ENTERO PUNCOMA",
-            
+        "  CADENA OPASIGNACION ENTERO RESTA CADENA",
+        "  CADENA OPASIGNACION CADENA RESTA ENTERO",
+        
+        "  CADENA OPASIGNACION ENTERO RESTA ENTERO PUNCOMA",
+        "  CADENA OPASIGNACION REAL RESTA REAL PUNCOMA",
+        "  CADENA OPASIGNACION REAL RESTA ENTERO PUNCOMA",
+        "  CADENA OPASIGNACION ENTERO RESTA REAL PUNCOMA",
+        "  CADENA OPASIGNACION ENTERO RESTA ENTERO",
+        "  CADENA OPASIGNACION REAL RESTA REAL",
+        "  CADENA OPASIGNACION REAL RESTA ENTERO",
+        "  CADENA OPASIGNACION ENTERO RESTA REAL",
+     ///////////////////////////////// 
+        "  CADENA OPASIGNACION CADENA DIVI CADENA PUNCOMA",
         "  CADENA OPASIGNACION REAL DIVI CADENA PUNCOMA",
         "  CADENA OPASIGNACION CADENA DIVI REAL PUNCOMA",
+        "  CADENA OPASIGNACION REAL DIVI CADENA",
+        "  CADENA OPASIGNACION CADENA DIVI REAL",
+        
         "  CADENA OPASIGNACION ENTERO DIVI CADENA PUNCOMA",
         "  CADENA OPASIGNACION CADENA DIVI ENTERO PUNCOMA",
+        "  CADENA OPASIGNACION ENTERO DIVI CADENA",
+        "  CADENA OPASIGNACION CADENA DIVI ENTERO",
+        
+        "  CADENA OPASIGNACION ENTERO DIVI ENTERO PUNCOMA",
+        "  CADENA OPASIGNACION REAL DIVI REAL PUNCOMA",
+        "  CADENA OPASIGNACION REAL DIVI ENTERO PUNCOMA",
+        "  CADENA OPASIGNACION ENTERO DIVI REAL PUNCOMA",
+        "  CADENA OPASIGNACION ENTERO DIVI ENTERO",
+        "  CADENA OPASIGNACION REAL DIVI REAL",
+        "  CADENA OPASIGNACION REAL DIVI ENTERO",
+        "  CADENA OPASIGNACION ENTERO DIVI REAL",
         };
+        /////////////////////////////
                 String real[] = {
         "  REAL OPASIGNACION CADENA SUMA REAL PUNCOMA",
         "  REAL OPASIGNACION REAL SUMA CADENA PUNCOMA",
-        
+        "  REAL OPASIGNACION CADENA SUMA CADENA PUNCOMA",
+        "  REAL OPASIGNACION ENTERO SUMA CADENA PUNCOMA",
+        "  REAL OPASIGNACION ENTERO SUMA CADENA",
+        "  REAL OPASIGNACION CADENA SUMA ENTERO PUNCOMA",
+        "  REAL OPASIGNACION CADENA SUMA ENTERO",
+        "  REAL OPASIGNACION CADENA SUMA CADENA",
+        "  REAL OPASIGNACION CADENA SUMA REAL",
+        "  REAL OPASIGNACION REAL SUMA CADENA",
+        //////////////////////////////////////////
         "  REAL OPASIGNACION CADENA RESTA REAL PUNCOMA",
         "  REAL OPASIGNACION REAL RESTA CADENA PUNCOMA",
+        "  REAL OPASIGNACION CADENA RESTA CADENA PUNCOMA",
+        "  REAL OPASIGNACION CADENA RESTA CADENA",
+        "  REAL OPASIGNACION CADENA RESTA REAL",
+        "  REAL OPASIGNACION REAL RESTA CADENA",
+        "  REAL OPASIGNACION ENTERO RESTA CADENA PUNCOMA",
+        "  REAL OPASIGNACION ENTERO RESTA CADENA",
+        "  REAL OPASIGNACION CADENA RESTA ENTERO PUNCOMA",
+        "  REAL OPASIGNACION CADENA RESTA ENTERO",
         
         "  REAL OPASIGNACION CADENA DIVI REAL PUNCOMA",
         "  REAL OPASIGNACION REAL DIVI CADENA PUNCOMA",
-        
- 
-      
+        "  REAL OPASIGNACION CADENA DIVI CADENA PUNCOMA",
+        "  REAL OPASIGNACION CADENA DIVI CADENA",
+        "  REAL OPASIGNACION CADENA DIVI REAL",
+        "  REAL OPASIGNACION REAL DIVI CADENA",
+        "  REAL OPASIGNACION ENTERO DIVI CADENA PUNCOMA",
+        "  REAL OPASIGNACION ENTERO DIVI CADENA",
+        "  REAL OPASIGNACION CADENA DIVI ENTERO PUNCOMA",
+        "  REAL OPASIGNACION CADENA DIVI ENTERO",
+
         };
+         ////////////////////////////////////////////////
        String entero[] = {
+        "  ENTERO OPASIGNACION REAL SUMA CADENA PUNCOMA",
+        "  ENTERO OPASIGNACION CADENA SUMA REAL PUNCOMA",
+        "  ENTERO OPASIGNACION REAL SUMA CADENA",
+        "  ENTERO OPASIGNACION CADENA SUMA REAL",
+        
         "  ENTERO OPASIGNACION ENTERO SUMA CADENA PUNCOMA",
         "  ENTERO OPASIGNACION CADENA SUMA ENTERO PUNCOMA",
+        "  ENTERO OPASIGNACION ENTERO SUMA CADENA",
+        "  ENTERO OPASIGNACION CADENA SUMA ENTERO",
+        
+        "  ENTERO OPASIGNACION CADENA SUMA CADENA PUNCOMA",
+        "  ENTERO OPASIGNACION REAL SUMA REAL PUNCOMA",
+        "  ENTERO OPASIGNACION REAL SUMA ENTERO PUNCOMA",
+        "  ENTERO OPASIGNACION ENTERO SUMA REAL PUNCOMA",
+        "  ENTERO OPASIGNACION ENTERO SUMA CADENA",
+        "  ENTERO OPASIGNACION REAL SUMA REAL",
+        "  ENTERO OPASIGNACION REAL SUMA ENTERO",
+        "  ENTERO OPASIGNACION ENTERO SUMA REAL",
+  
+/////////////////////////////////
+        "  ENTERO OPASIGNACION REAL RESTA CADENA PUNCOMA",
+        "  ENTERO OPASIGNACION CADENA RESTA REAL PUNCOMA",
+        "  ENTERO OPASIGNACION REAL RESTA CADENA",
+        "  ENTERO OPASIGNACION CADENA RESTA REAL",
         
         "  ENTERO OPASIGNACION ENTERO RESTA CADENA PUNCOMA",
         "  ENTERO OPASIGNACION CADENA RESTA ENTERO PUNCOMA",
+        "  ENTERO OPASIGNACION ENTERO RESTA CADENA",
+        "  ENTERO OPASIGNACION CADENA RESTA ENTERO",
+        
+        "  ENTERO OPASIGNACION CADENA RESTA CADENA PUNCOMA",
+        "  ENTERO OPASIGNACION REAL RESTA REAL PUNCOMA",
+        "  ENTERO OPASIGNACION REAL RESTA ENTERO PUNCOMA",
+        "  ENTERO OPASIGNACION ENTERO RESTA REAL PUNCOMA",
+        "  ENTERO OPASIGNACION CADENA RESTA CADENA",
+        "  ENTERO OPASIGNACION REAL RESTA REAL",
+        "  ENTERO OPASIGNACION REAL RESTA ENTERO",
+        "  ENTERO OPASIGNACION ENTERO RESTA REAL",
+     ///////////////////////////////// 
+        "  ENTERO OPASIGNACION CADENA DIVI CADENA PUNCOMA",
+        "  ENTERO OPASIGNACION REAL DIVI CADENA PUNCOMA",
+        "  ENTERO OPASIGNACION CADENA DIVI REAL PUNCOMA",
+        "  ENTERO OPASIGNACION REAL DIVI CADENA",
+        "  ENTERO OPASIGNACION CADENA DIVI REAL",
         
         "  ENTERO OPASIGNACION ENTERO DIVI CADENA PUNCOMA",
         "  ENTERO OPASIGNACION CADENA DIVI ENTERO PUNCOMA",
+        "  ENTERO OPASIGNACION ENTERO DIVI CADENA",
+        "  ENTERO OPASIGNACION CADENA DIVI ENTERO",
+        
+        "  ENTERO OPASIGNACION ENTERO DIVI ENTERO PUNCOMA",
+        "  ENTERO OPASIGNACION REAL DIVI REAL PUNCOMA",
+        "  ENTERO OPASIGNACION REAL DIVI ENTERO PUNCOMA",
+        "  ENTERO OPASIGNACION ENTERO DIVI REAL PUNCOMA",
+        "  ENTERO OPASIGNACION ENTERO DIVI ENTERO",
+        "  ENTERO OPASIGNACION REAL DIVI REAL",
+        "  ENTERO OPASIGNACION REAL DIVI ENTERO",
+        "  ENTERO OPASIGNACION ENTERO DIVI REAL",
         };
         //////////CADENA ASIGNACIÓN/////////
            for (int j = 0; j<cadena2.length; j++) {
@@ -803,7 +908,7 @@ public class Compilador extends javax.swing.JFrame {
               // System.out.println("aquisito "+erronio[j]);
                for (int i = 0; INFOX[i] != null; i++) {
                 String lista= INFOX[i];
-                 System.out.println("ito "+lista+"   vbdkdbj  "+Regla);
+                 //System.out.println("ito "+lista+"   vbdkdbj  "+Regla);
                  if(Regla.equals(lista))
                         {
                               
@@ -921,8 +1026,6 @@ public class Compilador extends javax.swing.JFrame {
         jtaOutputConsole.setText("");
         tokens.clear();
         errors.clear();
-        identProd.clear();
-        identificadores.clear();
         codeHasBeenCompiled = false;
     }
 

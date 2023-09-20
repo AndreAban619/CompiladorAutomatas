@@ -1,24 +1,20 @@
-rea_ ISC_132 , ISC_342
-cad_ ISC_654 ;
-ent_ ISC_666 ;
-ISC_666 = 4064 ;
-ISC_132 = 4544533 ;
-ISC_132 = ISC_666 + ISC_654 ;
-4554
-ewkfnwoifw ;
-7237842fwwef;
-ISC_654
-456784
-q
-{
-123.47654
+ent_ ISC_001, ISC_002, ISC_003, ISC_111, ISC_712, ISC_666; 
+rea_ ISC_004, ISC_005, ISC_006; 
+cad_ ISC_007, ISC_008, ISC_009, ISC_619;
+ISC_004 ="No puedes guardarlo" ;
+ISC_008 = ISC_123 ;
+
+ISC_003 = ISC_006 + 414 ;
+ISC_006 = ISC_002 ;
+ISC_001 = ISC_001 + 414 ;
+ISC_003 = ISC_000 + 41234 ;
+
+4if4 ( ISC_001 == 434 && ISC_002 != 4554) 4then4
+{  
+ISC_002 = 414 + 424;
+ISC_111 = ISC_712 + ISC_666 + ISC_619;
 }
-"HOLAAA"="pepe" ;
-4564 = "cocoa" ;
-"w"
-4064
-}
-23456789
-4if4
-4then4
 4else4
+{
+ISC_002 = 414 - 424;
+}
