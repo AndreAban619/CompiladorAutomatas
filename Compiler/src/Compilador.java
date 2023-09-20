@@ -120,7 +120,6 @@ public class Compilador extends javax.swing.JFrame {
         btnGuardarC = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtpCode = new javax.swing.JTextPane();
-        panelButtonCompilerExecute = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtaOutputConsole = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -192,17 +191,6 @@ public class Compilador extends javax.swing.JFrame {
 
         jScrollPane1.setViewportView(jtpCode);
 
-        javax.swing.GroupLayout panelButtonCompilerExecuteLayout = new javax.swing.GroupLayout(panelButtonCompilerExecute);
-        panelButtonCompilerExecute.setLayout(panelButtonCompilerExecuteLayout);
-        panelButtonCompilerExecuteLayout.setHorizontalGroup(
-            panelButtonCompilerExecuteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 222, Short.MAX_VALUE)
-        );
-        panelButtonCompilerExecuteLayout.setVerticalGroup(
-            panelButtonCompilerExecuteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 47, Short.MAX_VALUE)
-        );
-
         jtaOutputConsole.setEditable(false);
         jtaOutputConsole.setBackground(new java.awt.Color(255, 255, 255));
         jtaOutputConsole.setColumns(20);
@@ -236,7 +224,7 @@ public class Compilador extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Token error", "Lexema         Descripcion       Linea"
+                "Token error", "Lexema             Descripcion            Linea"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -251,6 +239,7 @@ public class Compilador extends javax.swing.JFrame {
         jScrollPane4.setViewportView(tblerrores);
         if (tblerrores.getColumnModel().getColumnCount() > 0) {
             tblerrores.getColumnModel().getColumn(0).setMaxWidth(200);
+            tblerrores.getColumnModel().getColumn(1).setResizable(false);
         }
 
         btnCompilar.setText("Compilar");
@@ -271,9 +260,7 @@ public class Compilador extends javax.swing.JFrame {
             .addGroup(rootPanelLayout.createSequentialGroup()
                 .addGap(12, 12, 12)
                 .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(rootPanelLayout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 693, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 693, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(rootPanelLayout.createSequentialGroup()
                         .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(buttonsFilePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -285,15 +272,12 @@ public class Compilador extends javax.swing.JFrame {
                             .addGroup(rootPanelLayout.createSequentialGroup()
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane4))
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE))
                             .addGroup(rootPanelLayout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(50, 50, 50)
-                                .addComponent(panelButtonCompilerExecute, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 8, Short.MAX_VALUE)))))
-                .addContainerGap())
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(28, 28, 28))
         );
         rootPanelLayout.setVerticalGroup(
             rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -307,12 +291,10 @@ public class Compilador extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCompilar))
                     .addGroup(rootPanelLayout.createSequentialGroup()
-                        .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(panelButtonCompilerExecute, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel1)
-                                .addComponent(jLabel2)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                         .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
@@ -326,6 +308,28 @@ public class Compilador extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnCompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompilarActionPerformed
+        if (getTitle().contains("*") || getTitle().equals(title)) {
+            if (directorio.Save()) {
+                compile(); // el boton compilar ejecuta la funcion compile
+            }
+        } else {
+            compile();
+        }
+    }//GEN-LAST:event_btnCompilarActionPerformed
+
+    private void btnGuardarCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCActionPerformed
+        if (directorio.SaveAs()) {  ///guardar como
+            clearFields();
+        }
+    }//GEN-LAST:event_btnGuardarCActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        if (directorio.Save()) { ///guardar
+            clearFields();
+        }
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         directorio.New(); //crear un directorio
         clearFields();//LIMPIAR
@@ -336,28 +340,6 @@ public class Compilador extends javax.swing.JFrame {
             clearFields();
         }
     }//GEN-LAST:event_btnAbrirActionPerformed
-
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        if (directorio.Save()) { ///guardar
-            clearFields();
-        }
-    }//GEN-LAST:event_btnGuardarActionPerformed
-
-    private void btnGuardarCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCActionPerformed
-        if (directorio.SaveAs()) {  ///guardar como
-            clearFields();
-        }
-    }//GEN-LAST:event_btnGuardarCActionPerformed
-
-    private void btnCompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompilarActionPerformed
-        if (getTitle().contains("*") || getTitle().equals(title)) {
-            if (directorio.Save()) {
-                compile(); // el boton compilar ejecuta la funcion compile
-            }
-        } else {
-            compile();
-        }
-    }//GEN-LAST:event_btnCompilarActionPerformed
 
     private void compile() {
 
@@ -395,7 +377,7 @@ public class Compilador extends javax.swing.JFrame {
             }
             // System.out.println("ffff"+tokens.toString());
             Lexem = tokens.toString(); // copio los datos a mi cadena para analizar
-            System.out.println(Lexem); //  el lexem guarda las variable a analizar
+            //System.out.println(Lexem); //  el lexem guarda las variable a analizar
 
         } catch (FileNotFoundException ex) {
             System.out.println("El archivo no pudo ser encontrado... " + ex.getMessage());
@@ -413,26 +395,20 @@ public class Compilador extends javax.swing.JFrame {
     private void fillTableTokens() { ///////LLenando la tabla de simbolos
         tamañote = tokens.size();
         tokens.forEach(token -> {
-            TOKE = token.getLexicalComp();
-            TOKEN[cont1] = TOKE;
+            TOKE = token.getLexicalComp();//lo tomamos de lexer y lo guardamos en una variable
+            TOKEN[cont1] = TOKE;//ese variable se la pasamos a un arreglo con el mismo nombre 
             Lexem = token.getLexeme();
             Lexema[cont1] = Lexem;
             LINE = token.getLine();
             LINEA[cont1] = LINE;
             COLUMN = token.getColumn();
             COLUMNA[cont1] = COLUMN;
-       
+  
              if(TOKEN[cont1]== "Nodefinido")  //Guarda las variables que no están definidas y las elimina
              {
-                                 
-               ERROR[contaerror]= Lexema[cont1]+"           Indefinida la variable              " + " " + LINEA[cont1];
+               ERROR[contaerror]=Lexema[cont1]+"          Indefinida la variable          "+ LINEA[cont1];
                contaerror++;
-               //Lexema[cont1]=" ";//dejarlo en ¿lexema? por que no aparece en la tabla de simbolos
-               //System.out.print(ERROR[contaerror]);
              }
-           
-            // Object[] data = new Object[]{TOKE,Lexem, "[" + LINE + ", " + COLUMN + "]"};
-            //Functions.addRowDataInTable(tblTokens, data);
             cont1++;
         });
         //////ANALIZAR LAS CADENAS
@@ -458,7 +434,7 @@ public class Compilador extends javax.swing.JFrame {
             }
         }
         ////////Cambiar el tipo de declaración
-        ////////////////////////////////////////////// Primera declaracion
+        ////////////////////////////////////////////// Primera declaracion le pone su tipo a las ya declaradas
         for (int i = 0; Tokenpos[0][i] != null; i++) {
             for (int j = 0; TOKEN[j] != null; j++) {
                 if (TOKEN[j] == "IDENTIFICADOR") {
@@ -493,13 +469,15 @@ public class Compilador extends javax.swing.JFrame {
                 if (TOKEN[j] == "IDENTIFICADOR") {
                     if (Lexema[j] == Tokenpos[2][i]) {
                         TOKEN[j] = Tokenpos[2][0];
-                        //System.out.println( "DAT: "+TOKEN[j]+ Lexema[j]+ LINEA[j]+ COLUMNA[j] +j);
+                       // System.out.println( "DAT:"+TOKEN[j]+ Lexema[j]+ LINEA[j]+ COLUMNA[j] +j);
                         //System.out.println( "daton: "+Tokenpos[2][i]);//PRIMERA DECLARACION 
                     }
                 }
             }
         }
-   ///////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////
+        //////////////////////////////////////////////////////////////INCOMPATIBILIDAD DE TIPOS
+   //////////////////Rellenar Tabla de simbolos /////////////////////////////////////////////////////
    // Usar ArrayList para mantener elementos únicos y sincronizados
         ArrayList<String> lexemaList = new ArrayList<>();
         ArrayList<String> tokenList = new ArrayList<>();
@@ -519,7 +497,12 @@ public class Compilador extends javax.swing.JFrame {
             }
         //Rellenar tabla de tokens
         for (int j = 0; TOKEN[j] != null; j++) {
-            if(TOKEN[j]!= "ent_"|TOKEN[j]!= "rea_")
+            if (TOKEN[j]=="IDENTIFICADOR")  //indefinida la variable cuando se usa un identificador y este no está declarado
+            {
+                ERROR[contaerror]=Lexema[j]+"          Indefinida la variable          "+ LINEA[j];
+               contaerror++;
+            }
+            if(!(TOKEN[j].equals("ent_ ") || TOKEN[j].equals("rea_ ")|| TOKEN[j].equals("cad_ ")|| TOKEN[j].equals("cad_")|| TOKEN[j].equals("ent_")|| TOKEN[j].equals("rea_"))) //si no es un tipo de dato no se muestra en la tabla
             {
                 TOKEN[j]= " ";
             }
@@ -528,6 +511,8 @@ public class Compilador extends javax.swing.JFrame {
 
             }
    ///////////////////////////////////////////////////////////////////////
+
+
         //////////////////////////////////////////////////////////////INCOMPATIBILIDAD DE TIPOS
         for (int i = 0; i < tamañote; i++) {
             linfin = LINEA[i];//Guarda la linea maxima
@@ -547,8 +532,8 @@ public class Compilador extends javax.swing.JFrame {
             ////si el valor del lexema es entero lo guarda en una cadena perteneciente a los enteros y asi en todas
             String compararval = TOKEN[i];
             if (compararval.equals(enterito)) {   //compara el valor que trae el token i guardado en la cadena compararval
-                 System.out.println("toke: "+TOKEN[i]); 
-                 System.out.println("Entero: "+Lexema[i]);   
+                // System.out.println("toke: "+TOKEN[i]); 
+                 //System.out.println("Entero: "+Lexema[i]);   
                 ENTERO[o] = Lexema[i];
                 o++;
                 // System.out.println(i+"hhh"+o);  
@@ -860,11 +845,11 @@ public class Compilador extends javax.swing.JFrame {
            for (int j = 0; j<cadena2.length; j++) {
            
                String inco=cadena2[j]; //guarda las reglas en una variable para despues comparar
-               System.out.println("aquisito "+inco);
+              // System.out.println("aquisito "+inco);
                
                for (int i = 0; INFOX[i] != null; i++) {
                 String inc= INFOX[i];
-                System.out.println("ito"+inc+"   vbdkdb"+inco);
+                //System.out.println("ito"+inc+"   vbdkdb"+inco);
                  if(inco.equals(inc))
                         {
                                //.out.println("aquisitoxfffsvr ");
@@ -967,50 +952,7 @@ public class Compilador extends javax.swing.JFrame {
            }
     }
          /////////////////////////////////// 
-
-
-    ////////////VERIFICAR/////////////////////////////////////////Error de asignación
-   
-    
-    int cont1=0,cont2=0,cont3=0;
-    for (int j = 0; TOKEN[j] != null; j++) {
-    // System.out.println("Acoo: "+TOKEN[j]);
-          String compa=TOKEN[j];     
-           String compa1="IDENTIFICADORDEC";  
-            String compa2="IDENTIFICADOR";  
-             String compa3="IDENTIFICADORNUM";  
-        if(compa.equals(compa1))
-        {
-            IDENTI1[cont1]= Lexema[j];
-            TOKEN[j]="IGNORAR";
-            cont1++;
-        }
-         if(compa.equals(compa2))
-        {
-             IDENTI2[cont2]= Lexema[j];
-            TOKEN[j]="IGNORAR";
-            cont2++;
-        }
-          if(compa.equals(compa3))
-        {
-             IDENTI3[cont3]= Lexema[j];
-            TOKEN[j]="IGNORAR";
-            cont3++;
-        }
-            }        
-   
-        /////////////////////////////////////////////////////////////////////
-        for (int i = 0; i < linfin; i++) 
-        {
-            if(INFOX[i]!=null)
-            {
-                if(INFOX[i]!=" "){
-          //  System.out.println("LINEA: "+INFOX[i]);
-                }
-            }
-        } 
- //System.out.println("///////////////");
-        ////////////////////////Tabla de errores
+       ////////////////////////Tabla de errores
         for (int i = 0; i < contaerror; i++) {
             int contando = i + 1;
      
@@ -1103,7 +1045,6 @@ public class Compilador extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTextArea jtaOutputConsole;
     private javax.swing.JTextPane jtpCode;
-    private javax.swing.JPanel panelButtonCompilerExecute;
     private javax.swing.JPanel rootPanel;
     private javax.swing.JTable tblTokens;
     private javax.swing.JTable tblerrores;
