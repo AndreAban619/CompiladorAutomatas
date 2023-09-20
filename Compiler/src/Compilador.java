@@ -410,7 +410,7 @@ public class Compilador extends javax.swing.JFrame {
                CopyTokenpos[nume][nume2]=Tokenpos[nume][nume2] ;
                //System.out.print("Dato guardado: "+ Tokenpos[nume][nume2]);
                 //System.out.print(" x: "+nume+"y: "+nume2+" NUMLIN: "+numlin+" i: "+i);
-                //System.out.println(" ");
+                //System.out.println("aknakna "+CopyTokenpos[nume][nume2]);
                 nume2++;
             } else {
                 nume2 = 0;
@@ -509,7 +509,6 @@ public class Compilador extends javax.swing.JFrame {
         int o2 = 0;
         int o3 = 0;
         for (int i = 0; TOKEN[i] != null; i++) {
-           
             if (TOKEN[i].equals("ent_ ")||TOKEN[i].equals("ent_") ) {   //compara el valor que trae el token i guardado en la cadena compararval
                 //System.out.println("toke: "+TOKEN[i]); 
                 // System.out.println("lex: "+Lexema[i]);   
@@ -699,7 +698,7 @@ public class Compilador extends javax.swing.JFrame {
                     } 
      //////////////////////////////////
            INFOX[conta]= INFOX[conta] +" "+Tokenpos[i][j];  //SE CONCATENA Y GUARDA LINEA POR LINEA
-         //  System.out.println("aqui:" + INFOX[conta]);  //contiene la tabla traducida 
+         System.out.println("aqui:" + INFOX[conta]);  //contiene la tabla traducida 
             }
              conta++;           
         }
@@ -892,9 +891,10 @@ public class Compilador extends javax.swing.JFrame {
                // System.out.println("lista: "+lista+"   Regla: "+Regla);
                  if(Regla.equals(lista))
                         {
-                               //.out.println("aquisitoxfffsvr ");
-                               int osi=i+4;
+                            int osi=i+4;
+                               
                             ERROR[contaerror]="Incompatibilidad de tipos de tipo cad_     " + " " +osi;
+                          
                             contaerror++;
                         }
            }
@@ -1053,7 +1053,6 @@ public class Compilador extends javax.swing.JFrame {
     // Reinicia otras variables según sea necesario
     tokens = new ArrayList<>();
     errors = new ArrayList<>();
-    timerKeyReleased = null;
     codeHasBeenCompiled = false;
     tamañote = 0;
     cont1 = 0;
@@ -1070,11 +1069,7 @@ public class Compilador extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
