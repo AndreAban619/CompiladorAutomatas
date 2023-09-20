@@ -306,24 +306,24 @@ public class Compilador extends javax.swing.JFrame {
 
     private void btnGuardarCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCActionPerformed
         if (directorio.SaveAs()) {  ///guardar como
-            clearFields();
+        
         }
     }//GEN-LAST:event_btnGuardarCActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         if (directorio.Save()) { ///guardar
-            clearFields();
+           
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         directorio.New(); //crear un directorio
-        clearFields();//LIMPIAR
+       clearFields();
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbrirActionPerformed
         if (directorio.Open()) { //abrir un directorio
-            clearFields();
+         
         }
     }//GEN-LAST:event_btnAbrirActionPerformed
 
@@ -699,7 +699,7 @@ public class Compilador extends javax.swing.JFrame {
                     } 
      //////////////////////////////////
            INFOX[conta]= INFOX[conta] +" "+Tokenpos[i][j];  //SE CONCATENA Y GUARDA LINEA POR LINEA
-           System.out.println("aqui:" + INFOX[conta]);  //contiene la tabla traducida 
+         //  System.out.println("aqui:" + INFOX[conta]);  //contiene la tabla traducida 
             }
              conta++;           
         }
@@ -889,7 +889,7 @@ public class Compilador extends javax.swing.JFrame {
                
                for (int i = 0; INFOX[i] != null; i++) {
                 String lista= INFOX[i];
-                System.out.println("lista: "+lista+"   Regla: "+Regla);
+               // System.out.println("lista: "+lista+"   Regla: "+Regla);
                  if(Regla.equals(lista))
                         {
                                //.out.println("aquisitoxfffsvr ");
@@ -1024,9 +1024,46 @@ public class Compilador extends javax.swing.JFrame {
         Functions.clearDataInTable(tblTokens);
         Functions.clearDataInTable(tblerrores);
         jtaOutputConsole.setText("");
-        tokens.clear();
-        errors.clear();
         codeHasBeenCompiled = false;
+          // Reinicia las variables de tipo String
+    for (int i = 0; i < Lexema.length; i++) {
+        Lexema[i] = null;
+        TOKEN[i] = null;
+        ERROR[i] = null;
+        ENTERO[i] = null;
+        CADENA[i] = null;
+        REAL[i] = null;
+        INFOX[i] = null;
+    }
+
+    // Reinicia las variables de tipo int
+    for (int i = 0; i < TOKEN.length; i++) {
+        LINEA[i] = 0;
+        COLUMNA[i] = 0;
+    }
+
+    // Reinicia las variables de tipo String[][]
+    for (int i = 0; i < Tokenpos.length; i++) {
+        for (int j = 0; j < Tokenpos[i].length; j++) {
+            Tokenpos[i][j] = null;
+            CopyTokenpos[i][j] = null;
+        }
+    }
+
+    // Reinicia otras variables según sea necesario
+    tokens = new ArrayList<>();
+    errors = new ArrayList<>();
+    timerKeyReleased = null;
+    codeHasBeenCompiled = false;
+    tamañote = 0;
+    cont1 = 0;
+    contaerror = 0;
+    linfin = 0;
+    Lexem = null;
+    TOKE = null;
+    LINE = 0;
+    COLUMN = 0;
+        
     }
 
     /**
