@@ -20,8 +20,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -58,8 +61,6 @@ public class Compilador extends javax.swing.JFrame {
     String[] REAL = new String[2000];
      String[] INFOX = new String[2000];
      String[] INFOX2 = new String[2000];
-        
-        String ALEXESPEJO[][] = new String[2000][2000];
      String[] IDENTI1 = new String[2000];
      String[] IDENTI2 = new String[2000];
      String[] IDENTI3 = new String[2000];
@@ -426,9 +427,10 @@ public class Compilador extends javax.swing.JFrame {
                                  
                ERROR[contaerror]= Lexema[cont1]+"           Indefinida la variable              " + " " + LINEA[cont1];
                contaerror++;
-               Lexema[cont1]=" ";//dejarlo en ¿lexema? por que no aparece en la tabla de simbolos
+               //Lexema[cont1]=" ";//dejarlo en ¿lexema? por que no aparece en la tabla de simbolos
                //System.out.print(ERROR[contaerror]);
              }
+           
             // Object[] data = new Object[]{TOKE,Lexem, "[" + LINE + ", " + COLUMN + "]"};
             //Functions.addRowDataInTable(tblTokens, data);
             cont1++;
@@ -442,9 +444,9 @@ public class Compilador extends javax.swing.JFrame {
         for (int i = 0; i < tamañote; i++) {
 
             if (LINEA[i] == numlin) {
-                Tokenpos[nume][nume2] = Lexema[i];///se guarda el valor del lexema en la posicion
+                Tokenpos[nume][nume2] = Lexema[i];///se guarda el valor del lexema en la posicion y linea
                CopyTokenpos[nume][nume2]=Tokenpos[nume][nume2] ;
-                //System.out.print("Dato guardado: "+ Tokenpos[nume][nume2]);
+               //System.out.print("Dato guardado: "+ Tokenpos[nume][nume2]);
                 //System.out.print(" x: "+nume+"y: "+nume2+" NUMLIN: "+numlin+" i: "+i);
                 //System.out.println(" ");
                 nume2++;
@@ -491,13 +493,41 @@ public class Compilador extends javax.swing.JFrame {
                 if (TOKEN[j] == "IDENTIFICADOR") {
                     if (Lexema[j] == Tokenpos[2][i]) {
                         TOKEN[j] = Tokenpos[2][0];
-                        //System.out.println( "DAT: "+TOKEN[j]+ Lexema[j]+ LINEA[j]+ COLUMNA[j]);
+                        //System.out.println( "DAT: "+TOKEN[j]+ Lexema[j]+ LINEA[j]+ COLUMNA[j] +j);
                         //System.out.println( "daton: "+Tokenpos[2][i]);//PRIMERA DECLARACION 
                     }
                 }
             }
         }
-   
+   ///////////////////////////////////////////////////////////////////////
+   // Usar ArrayList para mantener elementos únicos y sincronizados
+        ArrayList<String> lexemaList = new ArrayList<>();
+        ArrayList<String> tokenList = new ArrayList<>();
+
+        for (int i = 0; i < Lexema.length; i++) {
+            // Verificar si el Lexema ya existe en la lista
+            if (!lexemaList.contains(Lexema[i])) {
+                lexemaList.add(Lexema[i]);
+                tokenList.add(TOKEN[i]);
+            }
+        }
+
+        // Copiar los datos sin duplicados directamente a Lexema[] y TOKEN[]
+        for (int i = 0; i < lexemaList.size(); i++) {
+             Lexema[i] = lexemaList.get(i);
+            TOKEN[i] = tokenList.get(i);
+            }
+        //Rellenar tabla de tokens
+        for (int j = 0; TOKEN[j] != null; j++) {
+            if(TOKEN[j]!= "ent_"|TOKEN[j]!= "rea_")
+            {
+                TOKEN[j]= " ";
+            }
+                Object[] data = new Object[]{TOKEN[j], Lexema[j]};
+                Functions.addRowDataInTable(tblTokens, data);
+
+            }
+   ///////////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////INCOMPATIBILIDAD DE TIPOS
         for (int i = 0; i < tamañote; i++) {
             linfin = LINEA[i];//Guarda la linea maxima
@@ -762,15 +792,6 @@ public class Compilador extends javax.swing.JFrame {
                         //System.out.println("holaaas: "+hola+" "+hola1);
                         Tokenpos[i][j]="else";
                     } 
-                   
-                               //////////////////////////////
-    /* Pattern pat = Pattern.compile(".*1010*");
-     Matcher mat = pat.matcher(compararToken1);                                                                           
-     if (mat.matches()) {
-          Tokenpos[i][j]="IDENTIFICADORNUM"; 
-     } else {
-        //                                                                                
-     }*/
      //////////////////////////////////
            INFOX[conta]= INFOX[conta] +" "+Tokenpos[i][j];  //SE CONCATENA Y GUARDA LINEA POR LINEA
            System.out.println("aqui:   " + INFOX[conta]);  //contiene la tabla traducida 
@@ -989,81 +1010,6 @@ public class Compilador extends javax.swing.JFrame {
             }
         } 
  //System.out.println("///////////////");
-      ////////////////////  
-
-////////////////////////////////////////////// Rellenar tablas de simbolos
-        for (int j = 0; TOKEN[j] != null; j++) { 
-            String vacio = "ESTOCOLMO"; 
-             String vacio2 = " "; 
-       
-            if (Lexema[j] != vacio) {
-                if (TOKEN[j] == "IGNORAR"|TOKEN[j] == "ENTERO"|TOKEN[j] == "CADENA"|TOKEN[j] == "REAL"|TOKEN[j] == "PARENTESISA"|
-                        TOKEN[j] == "PARENTESISC"| TOKEN[j] == "LLAVEA"| TOKEN[j] == "LLAVEC"|
-                         TOKEN[j] == "RESTA"| TOKEN[j] == "MULTI"| TOKEN[j] == "DIVI"|
-                         TOKEN[j] == "YYY"| TOKEN[j] == "TAMBIEN"| TOKEN[j] == "MAYOR"|
-                         TOKEN[j] == "IGUALQUE"| TOKEN[j] == "DIFERENTE"| TOKEN[j] == "MAYORIGU"|
-                         TOKEN[j] == "MENORIGU"| TOKEN[j] == "DOSPUN"| TOKEN[j] == "FOR"| TOKEN[j] == "OPLOGICO"| TOKEN[j] == "Nodefinido") {
-                    TOKEN[j] = " "; 
-               
-                }
-                  if(TOKEN[j]== "PUNCOMA")
-           {
-
-                if(puncomaa!=0){
-                     Lexema[j] = " ";
-                    TOKEN[j] = " ";
-         
-                }
-                TOKEN[j] = " ";
-                puncomaa++;
-            }
-                         if(TOKEN[j]== "COMA")
-           {
-
-                if(comaa!=0){
-                     Lexema[j] = " ";
-                    TOKEN[j] = " ";
-         
-                }
-                TOKEN[j] = " ";
-                comaa++;
-            }
- if(TOKEN[j]== "OPASIGNACION")
-           {
-
-                if(iguaal!=0){
-                     Lexema[j] = " ";
-                    TOKEN[j] = " ";
-         
-                }
-                TOKEN[j] = " ";
-                iguaal++;
-            }
-
-  if(TOKEN[j]=="SUMA")
-           {
-                 
-                if(su!=0){
-                     Lexema[j] = " ";
-                    TOKEN[j] = " ";
-        
-                }
-                TOKEN[j] = " ";
-                su++;
-            }
-                if(TOKEN[j] == "IDENTIFICADORNUM"|TOKEN[j] == "IDENTIFICADORDEC")
-                {
-                     TOKEN[j] = " ";    
-                }
-                //System.out.println( "DAT: "+TOKEN[j]+ Lexema[j]+ LINEA[j]+ COLUMNA[j]);
-           
-                
-                ///////////
-                Object[] data = new Object[]{TOKEN[j], Lexema[j]};
-                Functions.addRowDataInTable(tblTokens, data);
-
-            }
-        }       
         ////////////////////////Tabla de errores
         for (int i = 0; i < contaerror; i++) {
             int contando = i + 1;
@@ -1072,41 +1018,9 @@ public class Compilador extends javax.swing.JFrame {
             //  System.out.println("olaaa"+ERROR[i]);
             Functions.addRowDataInTable(tblerrores, data2);
         }
-        ///////////////////////////
-  /////////////////Empezando el if////////////////////////////
-  for(int i =3;CopyTokenpos[i][0]!=null;i++)
-  {
-      for(int j =0; CopyTokenpos[i][j]!=null; j++)
-      {
-          String infor=CopyTokenpos[i][j];
-    
-        INFOX2[aron2]= INFOX2[aron2] +" "+CopyTokenpos[i][j];  //SE CONCATENA Y GUARDA LINEA POR LINEA
-   
-          //System.out.print(ALEX[i][j]);
-      }
-           aron2++;
-     // System.out.println(" ");
-  }
-  
-   for(int i=0;INFOX2[i]!=null;i++)
-      {
-      
-            list.add( INFOX2[i]);        
-      }
-   
-      
-  /*for(int i=0; INFOX2[i]!=null ;i++)
-  {
-      String pasapato=INFOX2[i];
-    
-      System.out.println("Linea: "+i+INFOX2[i]);
-  }*/
-  // Imprimir cuadruplos
-       
+        ///////////////////////////    
     }
 
-    
-  
     /////////////////////////////////////
     private void printConsole() {
         int sizeErrors = errors.size();
@@ -1126,7 +1040,7 @@ public class Compilador extends javax.swing.JFrame {
 
     private void clearFields() {
         Functions.clearDataInTable(tblTokens);
-                Functions.clearDataInTable(tblerrores);
+        Functions.clearDataInTable(tblerrores);
         jtaOutputConsole.setText("");
         tokens.clear();
         errors.clear();
