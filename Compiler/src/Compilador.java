@@ -553,6 +553,7 @@ public class Compilador extends javax.swing.JFrame {
                    String OR2="==";
                     String OR3="!=";
                     String DIVI="/";
+                    String multi="*";
                     
          for (int i = 0; i < linfin; i++) //AQUUI QUITO El NULLLL
         {
@@ -696,6 +697,11 @@ public class Compilador extends javax.swing.JFrame {
                         //System.out.println("holaaas: "+hola+" "+hola1);
                         Tokenpos[i][j]="else";
                     } 
+                                              if(compararToken1.equals(multi))
+                    {
+                        //System.out.println("holaaas: "+hola+" "+hola1);
+                        Tokenpos[i][j]="MULTI";
+                    } 
      //////////////////////////////////
            INFOX[conta]= INFOX[conta] +" "+Tokenpos[i][j];  //SE CONCATENA Y GUARDA LINEA POR LINEA
          System.out.println("aqui:" + INFOX[conta]);  //contiene la tabla traducida 
@@ -742,7 +748,21 @@ public class Compilador extends javax.swing.JFrame {
         "  CADENA OPASIGNACION REAL SUMA REAL",
         "  CADENA OPASIGNACION REAL SUMA ENTERO",
         "  CADENA OPASIGNACION ENTERO SUMA REAL",
-  
+        //////Multiplicacion//////
+        "  CADENA OPASIGNACION CADENA MULTI CADENA PUNCOMA",
+        "  CADENA OPASIGNACION CADENA MULTI CADENA",
+         "  CADENA OPASIGNACION ENTERO MULTI CADENA PUNCOMA",
+        "  CADENA OPASIGNACION CADENA MULTI ENTERO",
+         "  CADENA OPASIGNACION ENTERO MULTI REAL PUNCOMA",
+        "  CADENA OPASIGNACION REAL MULTI ENTERO",
+        "  CADENA OPASIGNACION ENTERO MULTI ENTERO PUNCOMA",
+        "  CADENA OPASIGNACION REAL MULTI REAL PUNCOMA",
+        "  CADENA OPASIGNACION REAL MULTI ENTERO PUNCOMA",
+        "  CADENA OPASIGNACION ENTERO MULTI REAL PUNCOMA",
+        "  CADENA OPASIGNACION ENTERO MULTI ENTERO",
+        "  CADENA OPASIGNACION REAL MULTI REAL",
+        "  CADENA OPASIGNACION REAL MULTI ENTERO",
+        "  CADENA OPASIGNACION ENTERO MULTI REAL",
 /////////////////////////////////
         "  CADENA OPASIGNACION REAL RESTA CADENA PUNCOMA",
         "  CADENA OPASIGNACION CADENA RESTA REAL PUNCOMA",
@@ -795,6 +815,9 @@ public class Compilador extends javax.swing.JFrame {
         "  REAL OPASIGNACION CADENA SUMA CADENA",
         "  REAL OPASIGNACION CADENA SUMA REAL",
         "  REAL OPASIGNACION REAL SUMA CADENA",
+        /////////////////multiplicacion/////////////
+        "  REAL OPASIGNACION CADENA MULTI CADENA PUNCOMA",
+        "  REAL OPASIGNACION CADENA MULTI CADENA",
         //////////////////////////////////////////
         "  REAL OPASIGNACION CADENA RESTA REAL PUNCOMA",
         "  REAL OPASIGNACION REAL RESTA CADENA PUNCOMA",
@@ -839,6 +862,27 @@ public class Compilador extends javax.swing.JFrame {
         "  ENTERO OPASIGNACION REAL SUMA REAL",
         "  ENTERO OPASIGNACION REAL SUMA ENTERO",
         "  ENTERO OPASIGNACION ENTERO SUMA REAL",
+        /////////////////////multiplicacion/////////////////////////
+        
+                
+        "  ENTERO OPASIGNACION CADENA MULTI CADENA PUNCOMA",
+        "  ENTERO OPASIGNACION REAL MULTI REAL PUNCOMA",
+        "  ENTERO OPASIGNACION REAL MULTI ENTERO PUNCOMA",
+        "  ENTERO OPASIGNACION ENTERO MULTI REAL PUNCOMA",
+        "  ENTERO OPASIGNACION REAL MULTI CADENA PUNCOMA",
+        "  ENTERO OPASIGNACION CADENA MULTI REAL PUNCOMA",
+        "  ENTERO OPASIGNACION ENTERO MULTI CADENA PUNCOMA",
+        "  ENTERO OPASIGNACION CADENA MULTI ENTERO PUNCOMA",
+        "  ENTERO OPASIGNACION REAL MULTI CADENA",
+        "  ENTERO OPASIGNACION CADENA MULTI REAL",
+        "  ENTERO OPASIGNACION ENTERO MULTI CADENA",
+        "  ENTERO OPASIGNACION CADENA MULTI ENTERO",
+        "  ENTERO OPASIGNACION ENTERO MULTI CADENA",
+        "  ENTERO OPASIGNACION REAL MULTI REAL",
+        "  ENTERO OPASIGNACION REAL MULTI ENTERO",
+        "  ENTERO OPASIGNACION ENTERO MULTI REAL",
+        
+        
   
 /////////////////////////////////
         "  ENTERO OPASIGNACION REAL RESTA CADENA PUNCOMA",
@@ -894,7 +938,6 @@ public class Compilador extends javax.swing.JFrame {
                             int osi=i+4;
                                
                             ERROR[contaerror]="Incompatibilidad de tipos de tipo cad_     " + " " +osi;
-                          
                             contaerror++;
                         }
            }
