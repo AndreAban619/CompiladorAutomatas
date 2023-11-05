@@ -1,72 +1,85 @@
 import java.util.Stack;
 
 public class GeneradordeTriplos {
-    public static String EstructuraTriplos(String expression) {
-        StringBuilder rpn = new StringBuilder();
-        Stack<Character> operatorStack = new Stack<>();
-        int tempCount = 1; // Contador para generar nombres de temporales numéricos
-        int letterTempCount = 1; // Contador para generar nombres de temporales de letras
-        int lineCount = 1; // Contador para el número de línea en los tríplos
+    public static String EstructuraTriplos(String expresion) {
+        // Inicializa un StringBuilder para almacenar la tabla de tríplos
+        StringBuilder tablaTriplos = new StringBuilder();
 
-        rpn.append("Linea\tDato Objeto\tDato Fuente\tOperador\n");
+        // Crea una pila para los operadores
+        Stack<Character> pilaOperadores = new Stack<>();
 
-        for (char token : expression.toCharArray()) {
-            if (Character.isLetterOrDigit(token)) {
-                if (Character.isDigit(token)) {
-                    // Cuando el token es un dígito, se genera un tríplo para asignar el valor a un temporal numérico.
-                    rpn.append(lineCount + "\ttemp" + tempCount + "\t" + token + "\t=\n");
-                    tempCount++;
+        // Inicializa un contador para generar nombres de temporales
+        int contadorTemporales = 1;
+
+        // Inicializa un contador para el número de línea en los tríplos
+        int contadorLinea = 1;
+
+        // Variable que almacena el último temporal utilizado
+        String ultimoTemporal = "";
+
+        // Almacena la variable a la izquierda del operador de asignación
+        String variableIzquierda = "";
+
+        // Agrega una cabecera a la tabla de tríplos
+        tablaTriplos.append("Linea\tDato Objeto\tDato Fuente\tOperador\n");
+
+        // Divide la expresión en tokens usando espacios como separadores
+        String[] tokens = expresion.split(" ");
+
+        // Recorre los tokens de la expresión
+        for (String token : tokens) {
+            if (!token.isEmpty()) {
+                if (token.equals("=")) {
+                    // Si el token es '=', es el operador de asignación
+                    // Asigna la variable a la izquierda del operador
+                    variableIzquierda = ultimoTemporal;
+                    ultimoTemporal = "";
+                } else if (esOperador(token)) {
+                    // Si el token es un operador, maneja la prioridad de operadores y genera tríplos
+                    char operador = token.charAt(0);
+                    pilaOperadores.push(operador);
                 } else {
-                    // Cuando el token es una letra, se genera un tríplo para asignar el valor a un temporal de letras.
-                    rpn.append(lineCount + "\ttemp" + letterTempCount + "\t" + token + "\t=\n");
-                    letterTempCount++;
-                }
-                lineCount++;
-            } else if (isOperator(token)) {
-                while (!operatorStack.isEmpty() && operatorStack.peek() != '(' && hasHigherPrecedence(operatorStack.peek(), token)) {
-                    // Cuando se encuentra un operador, se verifica la precedencia con los operadores en la pila
-                    // y se generan tríplos de operación.
-                    char operator = operatorStack.pop();
-                    rpn.append(lineCount + "\ttemp" + tempCount + "\ttemp" + (tempCount - 2) + "\t" + operator + "\n");
-                    tempCount++;
-                    lineCount++;
-                }
-                operatorStack.push(token); // Se agrega el operador a la pila.
-            } else if (token == '(') {
-                operatorStack.push(token); // Si es un paréntesis de apertura, se agrega a la pila.
-            } else if (token == ')') {
-                while (!operatorStack.isEmpty() && operatorStack.peek() != '(') {
-                    // Cuando se encuentra un paréntesis de cierre, se generan tríplos de operación
-                    // hasta que se empareje con el paréntesis de apertura.
-                    char operator = operatorStack.pop();
-                    rpn.append(lineCount + "\ttemp" + tempCount + "\ttemp" + (tempCount - 2) + "\t" + operator + "\n");
-                    tempCount++;
-                    lineCount++;
-                }
-                if (!operatorStack.isEmpty() && operatorStack.peek() == '(') {
-                    operatorStack.pop(); // Se quita el paréntesis de apertura de la pila.
+                    // Si el token es una variable
+                    if (ultimoTemporal.isEmpty()) {
+                        // Si no hay un último temporal, se crea uno nuevo
+                        tablaTriplos.append(contadorLinea + "\ttemp" + contadorTemporales + "\t" + token + "\t=\n");
+                        ultimoTemporal = "temp" + contadorTemporales;
+                        // Incrementa el contador de temporales
+                        contadorTemporales++;
+                    } else {
+                        char operador = pilaOperadores.pop();
+                        // Si ya se asignó un temporal previamente, se utiliza el mismo temporal
+                        tablaTriplos.append(contadorLinea + "\t" + token + "\t" + ultimoTemporal + "\t" + operador + "\n");
+                    }
+                    contadorLinea++;
                 }
             }
         }
 
-        while (!operatorStack.isEmpty()) {
-            // Al final del análisis de la expresión, se generan tríplos para los operadores restantes en la pila.
-            char operator = operatorStack.pop();
-            rpn.append(lineCount + "\ttemp" + tempCount + "\ttemp" + (tempCount - 2) + "\t" + operator + "\n");
-            tempCount++;
-            lineCount++;
+        // Al final, asigna el resultado final a un temporal llamado "resultado"
+        tablaTriplos.append(contadorLinea + "\tresultado\t" + ultimoTemporal + "\t=\n");
+
+        // Si hay una variable a la izquierda del operador de asignación, agrégala al resultado
+        if (!variableIzquierda.isEmpty()) {
+            tablaTriplos.insert(0, "0\t" + variableIzquierda + "\t\t=\n");
         }
 
-        return rpn.toString();
+        return tablaTriplos.toString();
     }
 
-    private static boolean isOperator(char c) {
-        // Verifica si un carácter es un operador matemático.
-        return c == '+' || c == '-' || c == '*' || c == '/' || c == '^';
+    public static void main(String[] args) {
+        // Define la expresión de entrada
+        String expresionInfija = "ISC_321 = ISC_123 + ISC_546";
+
+        // Llama a la función EstructuraTriplos para generar la tabla de tríplos
+        String tablaTriplos = EstructuraTriplos(expresionInfija);
+
+        // Imprime la tabla de tríplos
+        System.out.println("Triplos:\n" + tablaTriplos);
     }
 
-    private static int getPrecedence(char c) {
-        // Obtiene la precedencia de un operador.
+    // Función para obtener la precedencia de un operador
+    private static int obtenerPrecedencia(char c) {
         switch (c) {
             case '+':
             case '-':
@@ -81,15 +94,8 @@ public class GeneradordeTriplos {
         }
     }
 
-    private static boolean hasHigherPrecedence(char op1, char op2) {
-        // Compara la precedencia de dos operadores.
-        return getPrecedence(op1) >= getPrecedence(op2);
-    }
-
-    public static void main(String infixExpression) {
-        //String infixExpression = "x + a - 5";
-        //String rpnExpression = infixToRPNWithTriples(infixExpression);
-        EstructuraTriplos(infixExpression);
-        //.out.println("Triplos:\n" + rpnExpression);
+    // Función para verificar si un token es un operador
+    private static boolean esOperador(String token) {
+        return "+-*/^".contains(token);
     }
 }

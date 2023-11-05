@@ -1093,7 +1093,7 @@ public class Compilador extends javax.swing.JFrame {
         }
         //////TRIPLOSSSSSS/ TABLA////////////////////    
        GeneradordeTriplos converter = new GeneradordeTriplos();
-       String infixExpression = "s= x + a - 5";
+       String infixExpression = "x - 5";
        String rpnExpression = converter.EstructuraTriplos(infixExpression);
        
        System.out.println("Triplos:\n" + rpnExpression);
