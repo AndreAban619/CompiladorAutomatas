@@ -1092,17 +1092,29 @@ public class Compilador extends javax.swing.JFrame {
             Functions.addRowDataInTable(tblerrores, data2);
         }
         //////TRIPLOSSSSSS/ TABLA////////////////////    
-       GeneradordeTriplos converter = new GeneradordeTriplos();
-       String infixExpression = "x - 5";
-       String rpnExpression = converter.EstructuraTriplos(infixExpression);
-       
-       System.out.println("Triplos:\n" + rpnExpression);
-       Object[] Tablatriplos = new Object[]{ rpnExpression};
-       
-       tripolabel.setText("<html>" + rpnExpression+ "<html>");
-       Functions.addRowDataInTable(Tablatriplo, Tablatriplos);
         
-  
+        String texto = jtpCode.getText();
+        System.out.println("hola esta es la entrada: "+texto);
+        
+       GeneradordeTriplos converter = new GeneradordeTriplos();
+             String[] lineasDeEntrada = {
+            "ISC_002 = 414 + 123.4884",
+            "ISC_001 = ISC_001 * ISC_009",
+            "ISC_009555  = ISC_009",
+            "ISC_001 = ISC_002 - ISC_006",
+            "ISC_001 = ISC_002 - ISC_006",
+            "ISC_009 = ISC_008 + ISC_007",
+            "ISC_009 = ISC_002 / ISC_009",
+            "ISC_009 = \"ISC_002\" / ISC_009"
+        };
+       String regresotriplo = converter.EstructuraTriplos(lineasDeEntrada);
+       
+       System.out.println("Triplos:\n" + regresotriplo);
+       Object[] Tablatriplos = new Object[]{ regresotriplo};    
+      tripolabel.setText("<html>" + regresotriplo.replace("\n", "<br>").replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") + "</html>");
+       Functions.addRowDataInTable(Tablatriplo, Tablatriplos);
+       
+        
         ////////////////////////////////////////////////////////////
     }
     /////////////////////////////////////

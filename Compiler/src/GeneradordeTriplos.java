@@ -1,12 +1,9 @@
 import java.util.Stack;
 
 public class GeneradordeTriplos {
-    public static String EstructuraTriplos(String expresion) {
+    public static String EstructuraTriplos(String[] lineasDeEntrada) {
         // Inicializa un StringBuilder para almacenar la tabla de tríplos
         StringBuilder tablaTriplos = new StringBuilder();
-
-        // Crea una pila para los operadores
-        Stack<Character> pilaOperadores = new Stack<>();
 
         // Inicializa un contador para generar nombres de temporales
         int contadorTemporales = 1;
@@ -17,85 +14,76 @@ public class GeneradordeTriplos {
         // Variable que almacena el último temporal utilizado
         String ultimoTemporal = "";
 
-        // Almacena la variable a la izquierda del operador de asignación
-        String variableIzquierda = "";
-
         // Agrega una cabecera a la tabla de tríplos
         tablaTriplos.append("Linea\tDato Objeto\tDato Fuente\tOperador\n");
 
-        // Divide la expresión en tokens usando espacios como separadores
-        String[] tokens = expresion.split(" ");
+        // Procesa cada línea de entrada de manera independiente
+        for (String linea : lineasDeEntrada) {
+            // Inicializa una pila para operadores para cada línea de entrada
+            Stack<Character> pilaOperadores = new Stack<>();
 
-        // Recorre los tokens de la expresión
-        for (String token : tokens) {
-            if (!token.isEmpty()) {
-                if (token.equals("=")) {
-                    // Si el token es '=', es el operador de asignación
-                    // Asigna la variable a la izquierda del operador
-                    variableIzquierda = ultimoTemporal;
-                    ultimoTemporal = "";
-                } else if (esOperador(token)) {
-                    // Si el token es un operador, maneja la prioridad de operadores y genera tríplos
-                    char operador = token.charAt(0);
-                    pilaOperadores.push(operador);
-                } else {
-                    // Si el token es una variable
-                    if (ultimoTemporal.isEmpty()) {
-                        // Si no hay un último temporal, se crea uno nuevo
-                        tablaTriplos.append(contadorLinea + "\ttemp" + contadorTemporales + "\t" + token + "\t=\n");
-                        ultimoTemporal = "temp" + contadorTemporales;
-                        // Incrementa el contador de temporales
-                        contadorTemporales++;
-                    } else {
-                        char operador = pilaOperadores.pop();
-                        // Si ya se asignó un temporal previamente, se utiliza el mismo temporal
-                        tablaTriplos.append(contadorLinea + "\t" + token + "\t" + ultimoTemporal + "\t" + operador + "\n");
+            // Divide la línea en dos partes usando el "=" como separador
+            String[] partes = linea.split("=");
+            if (partes.length == 2) {
+                String antesDelIgual = partes[0].trim();
+                String despuesDelIgual = partes[1].trim();
+
+                // Procesa la parte antes del "="
+                String[] tokens = antesDelIgual.split(" ");
+                // Procesa la parte después del "="
+                tokens = despuesDelIgual.split(" ");
+                //antes del igual
+                for (int i = 0; i < tokens.length; i++) {
+                    String token = tokens[i];
+                    if (!token.isEmpty()) {
+                        if (esOperador(token)) {
+                            char operador = token.charAt(0);
+                            pilaOperadores.push(operador);
+                        } else {
+                            if (ultimoTemporal.isEmpty()) {
+                                tablaTriplos.append(contadorLinea + "\ttemp" + contadorTemporales + "\t" + token + "\t=\n");
+                                ultimoTemporal = "temp" + contadorTemporales;
+                                contadorTemporales++;
+                            } else {
+                                if (!pilaOperadores.isEmpty()) {
+                                    char operador = pilaOperadores.pop();
+                                    // Corrección: Añade el operador "%" a los operadores existentes
+                                    if (operador == '+' || operador == '-' || operador == '*' || operador == '/' || operador == '^' || operador == '%') {
+                                        tablaTriplos.append(contadorLinea + "\t" + ultimoTemporal + "\t" + token + "\t" + operador + "\n");
+                                    } else {
+                                        tablaTriplos.append(contadorLinea + "\t" + ultimoTemporal + "\t" + token + "\t=\n");
+                                    }
+                                } else {
+                                    tablaTriplos.append(contadorLinea + "\t" + ultimoTemporal + "\t" + token + "\t=\n");
+                                }
+                            }
+                            contadorLinea++;
+                        }
                     }
+                }
+
+                // Corrección: Agrega las variables antes del "=" al final de la expresión
+                if (!antesDelIgual.isEmpty()) {
+                    tablaTriplos.append(contadorLinea + "\t" + antesDelIgual + "\t" + ultimoTemporal  + "\t=\n");
                     contadorLinea++;
                 }
             }
         }
 
-        // Al final, asigna el resultado final a un temporal llamado "resultado"
-        tablaTriplos.append(contadorLinea + "\tresultado\t" + ultimoTemporal + "\t=\n");
-
-        // Si hay una variable a la izquierda del operador de asignación, agrégala al resultado
-        if (!variableIzquierda.isEmpty()) {
-            tablaTriplos.insert(0, "0\t" + variableIzquierda + "\t\t=\n");
-        }
-
         return tablaTriplos.toString();
     }
 
-    public static void main(String[] args) {
-        // Define la expresión de entrada
-        String expresionInfija = "ISC_321 = ISC_123 + ISC_546";
+    public static void main(String[] lineasDeEntrada) {
+  
 
         // Llama a la función EstructuraTriplos para generar la tabla de tríplos
-        String tablaTriplos = EstructuraTriplos(expresionInfija);
+        String tablaTriplos = EstructuraTriplos(lineasDeEntrada);
 
         // Imprime la tabla de tríplos
         System.out.println("Triplos:\n" + tablaTriplos);
     }
 
-    // Función para obtener la precedencia de un operador
-    private static int obtenerPrecedencia(char c) {
-        switch (c) {
-            case '+':
-            case '-':
-                return 1;
-            case '*':
-            case '/':
-                return 2;
-            case '^':
-                return 3;
-            default:
-                return 0;
-        }
-    }
-
-    // Función para verificar si un token es un operador
     private static boolean esOperador(String token) {
-        return "+-*/^".contains(token);
+        return "+-*/^%".contains(token);
     }
 }
