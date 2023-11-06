@@ -1,4 +1,6 @@
 import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GeneradordeTriplos {
     public static String EstructuraTriplos(String[] lineasDeEntrada) {
@@ -11,17 +13,66 @@ public class GeneradordeTriplos {
         // Inicializa un contador para el número de línea en los tríplos
         int contadorLinea = 1;
 
+        // Expresión regular para encontrar el patrón "4if4"
+        Pattern patronIf = Pattern.compile("4if4\\s*\\((.*?)\\)\\s*4then4");
+        
         // Variable que almacena el último temporal utilizado
         String ultimoTemporal = "";
 
         // Agrega una cabecera a la tabla de tríplos
         tablaTriplos.append("Linea\tDato Objeto\tDato Fuente\tOperador\n");
-
         // Procesa cada línea de entrada de manera independiente
         for (String linea : lineasDeEntrada) {
             // Inicializa una pila para operadores para cada línea de entrada
             Stack<Character> pilaOperadores = new Stack<>();
+                String expresionIf ="";
+            Matcher matcherIf = patronIf.matcher(linea);
+            if (matcherIf.find()) {
+                // Obtiene la expresión dentro del paréntesis
+                 expresionIf = matcherIf.group(1);
+                System.out.println("holaaa"+expresionIf);
+            }
+            //revisar la entrada del if
+            String[] lineaif = expresionIf.split("&&|\\|\\|");
+            for (String lineai : lineaif) {
+                //borramos espacios en blanco
+                lineai = lineai.trim();
+                  // Procesa cada línea de entrada de manera independiente
+            if (lineai.contains("&&") || lineai.contains("||")) {
+                String[] subexpresiones = lineai.split("&&|\\|\\|");
+                String expresionAntes = subexpresiones[0].trim();
+                String expresionDespues = subexpresiones[1].trim();
+                 
+                // Agrega el operador && o || como operador en un nuevo tríplo
+                String opeif = (lineai.contains("&&")) ? "&&" : "||";
+             
+            } else {
+                // Modificamos esta sección para manejar los nuevos operadores
+                String[] partes = lineai.split("<|>|<=|>=|==|!=");
+                if (partes.length == 2) {
+                    
+                    String expresionIzquierda = partes[0].trim();
+                    String opeif2 = lineai.substring(expresionIzquierda.length(), lineai.length() - partes[1].length()).trim();
+                    String expresionDerecha = partes[1].trim();
 
+                    // Genera el tríplo para asignar la variable a un nuevo temporal
+                    
+                    tablaTriplos.append(contadorLinea + "\ttemp" + contadorTemporales + "\t" + expresionIzquierda + "\t=\n");
+                    contadorLinea++;
+
+                    // Genera el tríplo para la comparación entre el temporal y la expresión 
+                    tablaTriplos.append(contadorLinea  + "\ttemp" + contadorTemporales+ "\t" +  expresionDerecha  + "\t" + opeif2 + "\n");
+                    contadorLinea++;
+                    tablaTriplos.append(contadorLinea + "\t" + "TR1" + "\t" + "TRUE" + "\t" + "LINEPAIR" + "\n");
+                    contadorLinea++;
+                    tablaTriplos.append(contadorLinea + "\t" + "TR1" + "\t" + "FALSE" + "\t" + "LINEPAIR" + "\n");
+                    contadorLinea++;
+                   
+                }
+            }
+            }
+            
+            /////////////
             // Divide la línea en dos partes usando el "=" como separador
             String[] partes = linea.split("=");
             if (partes.length == 2) {
@@ -32,6 +83,7 @@ public class GeneradordeTriplos {
                 String[] tokens = antesDelIgual.split(" ");
                 // Procesa la parte después del "="
                 tokens = despuesDelIgual.split(" ");
+
                 //antes del igual
                 for (int i = 0; i < tokens.length; i++) {
                     String token = tokens[i];
@@ -44,11 +96,14 @@ public class GeneradordeTriplos {
                                 tablaTriplos.append(contadorLinea + "\ttemp" + contadorTemporales + "\t" + token + "\t=\n");
                                 ultimoTemporal = "temp" + contadorTemporales;
                                 contadorTemporales++;
+                                 contadorLinea++;
                             } else {
                                 if (!pilaOperadores.isEmpty()) {
                                     char operador = pilaOperadores.pop();
+
                                     // Corrección: Añade el operador "%" a los operadores existentes
-                                    if (operador == '+' || operador == '-' || operador == '*' || operador == '/' || operador == '^' || operador == '%') {
+                                    if (operador == '+' || operador == '-' || operador == '*' || operador == '/'
+                                            || operador == '^' || operador == '%') {
                                         tablaTriplos.append(contadorLinea + "\t" + ultimoTemporal + "\t" + token + "\t" + operador + "\n");
                                     } else {
                                         tablaTriplos.append(contadorLinea + "\t" + ultimoTemporal + "\t" + token + "\t=\n");
@@ -56,28 +111,33 @@ public class GeneradordeTriplos {
                                 } else {
                                     tablaTriplos.append(contadorLinea + "\t" + ultimoTemporal + "\t" + token + "\t=\n");
                                 }
+                                contadorLinea++;
                             }
-                            contadorLinea++;
                         }
                     }
                 }
 
                 // Corrección: Agrega las variables antes del "=" al final de la expresión
                 if (!antesDelIgual.isEmpty()) {
-                    tablaTriplos.append(contadorLinea + "\t" + antesDelIgual + "\t" + ultimoTemporal  + "\t=\n");
+                    tablaTriplos.append(contadorLinea + "\t" + antesDelIgual + "\t" + ultimoTemporal + "\t=\n");
                     contadorLinea++;
+
                 }
+            }
+
+            // Verifica si la línea contiene "}" y guarda el valor de contadorLinea
+            if (linea.contains("}")) {
+                int finif = contadorLinea;
+                System.out.println("Línea donde termina: " + finif);
             }
         }
 
         return tablaTriplos.toString();
     }
 
-    public static void main(String[] lineasDeEntrada) {
-  
-
+    public static void main(String[] lineasSinPrimerasTres) {
         // Llama a la función EstructuraTriplos para generar la tabla de tríplos
-        String tablaTriplos = EstructuraTriplos(lineasDeEntrada);
+        String tablaTriplos = EstructuraTriplos(lineasSinPrimerasTres);
 
         // Imprime la tabla de tríplos
         System.out.println("Triplos:\n" + tablaTriplos);
@@ -86,4 +146,5 @@ public class GeneradordeTriplos {
     private static boolean esOperador(String token) {
         return "+-*/^%".contains(token);
     }
+
 }

@@ -116,8 +116,6 @@ public class Compilador extends javax.swing.JFrame {
         btnCompilar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        Tablatriplo = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
         tripolabel = new javax.swing.JLabel();
 
@@ -245,29 +243,7 @@ public class Compilador extends javax.swing.JFrame {
 
         jLabel2.setText("Tabla de errores");
 
-        Tablatriplo.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                ""
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        Tablatriplo.getTableHeader().setReorderingAllowed(false);
-        jScrollPane5.setViewportView(Tablatriplo);
-        if (Tablatriplo.getColumnModel().getColumnCount() > 0) {
-            Tablatriplo.getColumnModel().getColumn(0).setResizable(false);
-        }
-
-        jLabel3.setText("Tabla del triplo");
+        jLabel3.setText("Tabla de triplos");
 
         javax.swing.GroupLayout rootPanelLayout = new javax.swing.GroupLayout(rootPanel);
         rootPanel.setLayout(rootPanelLayout);
@@ -291,17 +267,11 @@ public class Compilador extends javax.swing.JFrame {
                 .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(rootPanelLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(15, 15, 15))
-                    .addGroup(rootPanelLayout.createSequentialGroup()
-                        .addGap(35, 35, 35)
-                        .addComponent(tripolabel, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addComponent(tripolabel, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         rootPanelLayout.setVerticalGroup(
             rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -313,28 +283,29 @@ public class Compilador extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rootPanelLayout.createSequentialGroup()
                         .addContainerGap()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addGap(33, 33, 33)))
+                            .addComponent(jLabel2))
+                        .addGap(21, 21, 21)))
                 .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(rootPanelLayout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCompilar)
-                        .addGap(82, 82, 82))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(rootPanelLayout.createSequentialGroup()
+                                .addComponent(jScrollPane1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnCompilar)
+                                .addGap(82, 82, 82))
+                            .addComponent(jScrollPane3)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rootPanelLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane4))
+                        .addGap(40, 40, 40))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rootPanelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(rootPanelLayout.createSequentialGroup()
-                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(34, 34, 34)
-                        .addComponent(tripolabel, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 62, Short.MAX_VALUE)))
-                .addGap(40, 40, 40))
+                        .addComponent(tripolabel, javax.swing.GroupLayout.PREFERRED_SIZE, 509, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
 
         getContentPane().add(rootPanel);
@@ -1094,10 +1065,23 @@ public class Compilador extends javax.swing.JFrame {
         //////TRIPLOSSSSSS/ TABLA////////////////////    
         
         String texto = jtpCode.getText();
-        System.out.println("hola esta es la entrada: "+texto);
-        
+       // Divide el texto en líneas usando el carácter de nueva línea como separador
+       String[] lineas = texto.split("\n");
+      // Crear un nuevo arreglo para almacenar las líneas sin las primeras 3 líneas
+        String[] lineasSinPrimerasTres = new String[lineas.length - 3];
+        // Copiar las líneas sin las primeras 3 líneas
+           for (int i = 3; i < lineas.length; i++) {
+        // Elimina los puntos y coma (";") de cada línea antes de copiarla
+        String linea = lineas[i].replace(";", "");
+            lineasSinPrimerasTres[i - 3] = linea;
+            }
+        // Imprimir las líneas sin las primeras 3 líneas y sin los puntos y coma
+       /* for (String linea : lineasSinPrimerasTres) {
+         System.out.println(linea);
+        }*/
+        //////
        GeneradordeTriplos converter = new GeneradordeTriplos();
-             String[] lineasDeEntrada = {
+          /*   String[] lineasDeEntrada = {
             "ISC_002 = 414 + 123.4884",
             "ISC_001 = ISC_001 * ISC_009",
             "ISC_009555  = ISC_009",
@@ -1106,13 +1090,13 @@ public class Compilador extends javax.swing.JFrame {
             "ISC_009 = ISC_008 + ISC_007",
             "ISC_009 = ISC_002 / ISC_009",
             "ISC_009 = \"ISC_002\" / ISC_009"
-        };
-       String regresotriplo = converter.EstructuraTriplos(lineasDeEntrada);
+        };*/
+       String regresotriplo = converter.EstructuraTriplos(lineasSinPrimerasTres);
        
        System.out.println("Triplos:\n" + regresotriplo);
        Object[] Tablatriplos = new Object[]{ regresotriplo};    
       tripolabel.setText("<html>" + regresotriplo.replace("\n", "<br>").replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") + "</html>");
-       Functions.addRowDataInTable(Tablatriplo, Tablatriplos);
+      // Functions.addRowDataInTable(Tablatriplo, Tablatriplos);
        
         
         ////////////////////////////////////////////////////////////
@@ -1138,6 +1122,7 @@ public class Compilador extends javax.swing.JFrame {
         Functions.clearDataInTable(tblTokens);
         Functions.clearDataInTable(tblerrores);
         jtaOutputConsole.setText("");
+        
         codeHasBeenCompiled = false;
           // Reinicia las variables de tipo String
     for (int i = 0; i < Lexema.length; i++) {
@@ -1215,7 +1200,6 @@ public class Compilador extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable Tablatriplo;
     private javax.swing.JButton btnAbrir;
     private javax.swing.JButton btnCompilar;
     private javax.swing.JButton btnGuardar;
@@ -1229,7 +1213,6 @@ public class Compilador extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTextArea jtaOutputConsole;
     private javax.swing.JTextPane jtpCode;
     private javax.swing.JPanel rootPanel;
