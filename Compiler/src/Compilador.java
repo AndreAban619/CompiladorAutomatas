@@ -256,7 +256,7 @@ public class Compilador extends javax.swing.JFrame {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, true, true
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -1145,6 +1145,7 @@ for (String arreglotri : arreglotriplos) {
     private void clearFields() {
         Functions.clearDataInTable(tblTokens);
         Functions.clearDataInTable(tblerrores);
+        Functions.clearDataInTable(Triplito);
         jtaOutputConsole.setText("");
         
         codeHasBeenCompiled = false;
