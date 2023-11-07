@@ -1,84 +1,117 @@
-import java.util.Stack;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-public class GeneradordeTriplos2 {
-    public static void main(String[] args) {
-        // Expresión de entrada
-        String expresionEntrada = "a > 10 && a < 20";
-
-        // Genera la tabla de tríplos para la expresión de entrada
-        String tablaTriplos = generarTablaTriplos(expresionEntrada);
-
-        // Imprime la tabla de tríplos
-        System.out.println("Tabla de Tríplos:\n" + tablaTriplos);
-    }
-
-    public static String generarTablaTriplos(String expresionEntrada) {
-        // Inicializa un StringBuilder para almacenar la tabla de tríplos
-        StringBuilder tablaTriplos = new StringBuilder();
-
-        // Inicializa un contador para el número de línea en los tríplos
-        int contadorLinea = 1;
-        int contadortemporal=1;
-        // Expresión regular para encontrar el patrón "4if4"
-        Pattern patronIf = Pattern.compile("4if4\\s*\\((.*?)\\)\\s*4then4");
-
-        // Variable que almacena el último temporal utilizado
-        String ultimoTemporal = "temp" + (contadortemporal);
-
-        // Agrega una cabecera a la tabla de tríplos
-        tablaTriplos.append("Linea\tDato Objeto\tDato Fuente\tOperador\n");
-
-        // Procesa la expresión de entrada
-        String[] lineasDeEntrada = expresionEntrada.split("&&|\\|\\|");
-
+       ////////
+          contadorLinea = 1;
+        // Procesa cada línea de entrada de manera independiente
         for (String linea : lineasDeEntrada) {
-            // Elimina espacios en blanco
-            linea = linea.trim();
-
-            // Procesa cada línea de entrada de manera independiente
-            if (linea.contains("&&") || linea.contains("||")) {
-                String[] subexpresiones = linea.split("&&|\\|\\|");
-                String expresionAntes = subexpresiones[0].trim();
-                String expresionDespues = subexpresiones[1].trim();
-                 
-                // Agrega el operador && o || como operador en un nuevo tríplo
-                String operador = (linea.contains("&&")) ? "&&" : "||";
-             
+            
+            
+       
+            // Inicializa una pila para operadores para cada línea de entrada
+            Stack<Character> pilaOperadores = new Stack<>();
+                String expresionIf ="";
+            Matcher matcherIf = patronIf.matcher(linea);
+            if (matcherIf.find()) {
+                // Obtiene la expresión dentro del paréntesis
+                 expresionIf = matcherIf.group(1);
+                //System.out.println("holaaa"+expresionIf);
+            }
+            //revisar la entrada del if
+            String[] lineaif = expresionIf.split("&&|\\|\\|");
+            for (String lineai : lineaif) {
+                //borramos espacios en blanco
+                lineai = lineai.trim();
+              
+                  // Procesa cada línea de entrada de manera independiente
+            if ( expresionIf.contains("||")) {
+                System.out.println("entro or");
+        
             } else {
+                  //System.out.println("entro and");
                 // Modificamos esta sección para manejar los nuevos operadores
-                String[] partes = linea.split("<|>|<=|>=|==|!=");
+                  int cont=0;
+                String[] partes = lineai.split("<|>|<=|>=|==|!=");
                 if (partes.length == 2) {
+                    if(cont==0){
+                        empez=empez-2;
+                    }
                     String expresionIzquierda = partes[0].trim();
-                    String operador = linea.substring(expresionIzquierda.length(), linea.length() - partes[1].length()).trim();
+                    String opeif2 = lineai.substring(expresionIzquierda.length(), lineai.length() - partes[1].length()).trim();
                     String expresionDerecha = partes[1].trim();
 
                     // Genera el tríplo para asignar la variable a un nuevo temporal
                     
-                    tablaTriplos.append(contadorLinea + "\t" + ultimoTemporal + "\t" + expresionIzquierda + "\t=\n");
+                    tablaTriplos.append(contadorLinea + "\ttemp" + contadorTemporales + "\t" + expresionIzquierda + "\t=\n");
                     contadorLinea++;
 
                     // Genera el tríplo para la comparación entre el temporal y la expresión 
-                    tablaTriplos.append(contadorLinea + "\t" + ultimoTemporal+ "\t" +  expresionDerecha  + "\t" + operador + "\n");
+                    tablaTriplos.append(contadorLinea  + "\ttemp" + contadorTemporales+ "\t" +  expresionDerecha  + "\t" + opeif2 + "\n");
+                    contadorLinea++;
+                    tablaTriplos.append(contadorLinea + "\t" + "TR1" + "\t" + "TRUE" + "\t" + empez + "\n");
+                    contadorLinea++;
+                    tablaTriplos.append(contadorLinea + "\t" + "TR1" + "\t" + "FALSE" + "\t" + finif  + "\n");
+                    contadorLinea++;
+                    cont++;
+                  
+                }
+       
+            }
+            }
+            
+            /////////////
+            // Divide la línea en dos partes usando el "=" como separador
+            String[] partes = linea.split("=");
+            if (partes.length == 2) {
+                String antesDelIgual = partes[0].trim();
+                String despuesDelIgual = partes[1].trim();
+
+                // Procesa la parte antes del "="
+                String[] tokens = antesDelIgual.split(" ");
+                // Procesa la parte después del "="
+                tokens = despuesDelIgual.split(" ");
+
+                //antes del igual
+                for (int i = 0; i < tokens.length; i++) {
+                    String token = tokens[i];
+                    if (!token.isEmpty()) {
+                        if (esOperador(token)) {
+                            char operador = token.charAt(0);
+                            pilaOperadores.push(operador);
+                        } else {
+                            if (ultimoTemporal.isEmpty()) {
+                                tablaTriplos.append(contadorLinea + "\ttemp" + contadorTemporales + "\t" + token + "\t=\n");
+                                ultimoTemporal = "temp" + contadorTemporales;
+                                contadorTemporales++;
+                                 contadorLinea++;
+                            } else {
+                                if (!pilaOperadores.isEmpty()) {
+                                    char operador = pilaOperadores.pop();
+
+                                    // Corrección: Añade el operador "%" a los operadores existentes
+                                    if (operador == '+' || operador == '-' || operador == '*' || operador == '/'
+                                            || operador == '^' || operador == '%') {
+                                        tablaTriplos.append(contadorLinea + "\t" + ultimoTemporal + "\t" + token + "\t" + operador + "\n");
+                                    } else {
+                                        tablaTriplos.append(contadorLinea + "\t" + ultimoTemporal + "\t" + token + "\t=\n");
+                                    }
+                                } else {
+                                    tablaTriplos.append(contadorLinea + "\t" + ultimoTemporal + "\t" + token + "\t=\n");
+                                }
+                                contadorLinea++;
+                            }
+                        }
+                    }
+                }
+
+                // Corrección: Agrega las variables antes del "=" al final de la expresión
+                if (!antesDelIgual.isEmpty()) {
+                    tablaTriplos.append(contadorLinea + "\t" + antesDelIgual + "\t" + ultimoTemporal + "\t=\n");
                     contadorLinea++;
 
-                    // Almacena el resultado de la comparación en un nuevo temporal
-                    String temporalResultado = "temp" + (contadorLinea);
-                    tablaTriplos.append(contadorLinea + "\t" + "TR1" + "\t" + "TRUE" + "\t" + "LINEPAIR" + "\n");
-                    contadorLinea++;
-                    tablaTriplos.append(contadorLinea + "\t" + "TR1" + "\t" + "FALSE" + "\t" + "LINEPAIR" + "\n");
-                    contadorLinea++;
-                   
                 }
             }
+
+         
         }
 
-        // Código posterior
-        // Aquí puedes agregar más procesamiento si es necesario
+import java.util.Stack;
+import java.util.regex.Matcher;
 
-        return tablaTriplos.toString();
-    }
-    // Resto del código
-    // ...
-}
