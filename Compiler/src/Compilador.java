@@ -117,7 +117,8 @@ public class Compilador extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        tripolabel = new javax.swing.JLabel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        Triplito = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
@@ -208,6 +209,7 @@ public class Compilador extends javax.swing.JFrame {
         jScrollPane3.setViewportView(tblTokens);
         if (tblTokens.getColumnModel().getColumnCount() > 0) {
             tblTokens.getColumnModel().getColumn(0).setMaxWidth(200);
+            tblTokens.getColumnModel().getColumn(1).setHeaderValue("Lexema  ");
         }
 
         tblerrores.setModel(new javax.swing.table.DefaultTableModel(
@@ -245,6 +247,28 @@ public class Compilador extends javax.swing.JFrame {
 
         jLabel3.setText("Tabla de triplos");
 
+        Triplito.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "", "", "", ""
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, true, true, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        Triplito.getTableHeader().setReorderingAllowed(false);
+        jScrollPane5.setViewportView(Triplito);
+        if (Triplito.getColumnModel().getColumnCount() > 0) {
+            Triplito.getColumnModel().getColumn(0).setMaxWidth(200);
+        }
+
         javax.swing.GroupLayout rootPanelLayout = new javax.swing.GroupLayout(rootPanel);
         rootPanel.setLayout(rootPanelLayout);
         rootPanelLayout.setHorizontalGroup(
@@ -267,11 +291,11 @@ public class Compilador extends javax.swing.JFrame {
                 .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tripolabel, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         rootPanelLayout.setVerticalGroup(
             rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -283,29 +307,24 @@ public class Compilador extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rootPanelLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel2))
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
                         .addGap(21, 21, 21)))
                 .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(rootPanelLayout.createSequentialGroup()
-                        .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(rootPanelLayout.createSequentialGroup()
-                                .addComponent(jScrollPane1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnCompilar)
-                                .addGap(82, 82, 82))
-                            .addComponent(jScrollPane3)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rootPanelLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane4))
-                        .addGap(40, 40, 40))
+                        .addComponent(jScrollPane1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCompilar)
+                        .addGap(82, 82, 82))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rootPanelLayout.createSequentialGroup()
-                        .addComponent(tripolabel, javax.swing.GroupLayout.PREFERRED_SIZE, 509, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane4)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE))
+                .addGap(40, 40, 40))
         );
 
         getContentPane().add(rootPanel);
@@ -1092,13 +1111,18 @@ public class Compilador extends javax.swing.JFrame {
             "ISC_009 = \"ISC_002\" / ISC_009"
         };*/
        String regresotriplo = converter.EstructuraTriplos(lineasSinPrimerasTres);
-       
-       System.out.println("Triplos:\n" + regresotriplo);
-       Object[] Tablatriplos = new Object[]{ regresotriplo};    
-      tripolabel.setText("<html>" + regresotriplo.replace("\n", "<br>").replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") + "</html>");
+        String[] arreglotriplos = regresotriplo.split("\n");
+for (String arreglotri : arreglotriplos) {
+    String[] columnas = arreglotri.split("\t"); // Divide la línea en columnas
+    Functions.addRowDataInTable(Triplito, columnas);
+}
+       //System.out.println("Triplos:\n" + regresotriplo);
+          
+      //tripolabel.setText("<html>" + regresotriplo.replace("\n", "<br>").replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") + "</html>");
       // Functions.addRowDataInTable(Tablatriplo, Tablatriplos);
-       
-        
+         // Agregar los datos de la lista al modelo de tabla
+        // Object[] Tablatriplos = new Object[]{ regresotriplo}; 
+         
         ////////////////////////////////////////////////////////////
     }
     /////////////////////////////////////
@@ -1200,6 +1224,7 @@ public class Compilador extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable Triplito;
     private javax.swing.JButton btnAbrir;
     private javax.swing.JButton btnCompilar;
     private javax.swing.JButton btnGuardar;
@@ -1213,11 +1238,11 @@ public class Compilador extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTextArea jtaOutputConsole;
     private javax.swing.JTextPane jtpCode;
     private javax.swing.JPanel rootPanel;
     private javax.swing.JTable tblTokens;
     private javax.swing.JTable tblerrores;
-    private javax.swing.JLabel tripolabel;
     // End of variables declaration//GEN-END:variables
 }

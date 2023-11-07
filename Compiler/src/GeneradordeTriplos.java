@@ -195,7 +195,6 @@ public class GeneradordeTriplos {
                     String expresionDerecha = partes[1].trim();
 
                     // Genera el tríplo para asignar la variable a un nuevo temporal
-                    
                     tablaTriplos.append(contadorLinea + "\ttemp" + contadorTemporales + "\t" + expresionIzquierda + "\t=\n");
                     contadorLinea++;
 
