@@ -47,7 +47,7 @@ public class GeneradordeTriplos {
                  expresionIf = matcherIf.group(1);
                 //System.out.println("holaaa"+expresionIf);
             }
-            //revisar la entrada del if
+            //revisar la entrada del if solo funciona con el and
             String[] lineaif = expresionIf.split("&&|\\|\\|");
             for (String lineai : lineaif) {
                 String[] partes = lineai.split("<=|>=|<|>|==|!=");
@@ -75,6 +75,8 @@ public class GeneradordeTriplos {
           
        
             }
+            ////////////verificar el or ///////
+            
              if (!linea.contains("4if4")) {
         String[] partes = linea.split("=");
         // Realiza alguna acción con las partes aquí
@@ -133,9 +135,7 @@ public class GeneradordeTriplos {
           contadorLinea = 1;
         // Procesa cada línea de entrada de manera independiente
         for (String linea : lineasDeEntrada) {
-            
-            
-       
+  
             // Inicializa una pila para operadores para cada línea de entrada
             Stack<Character> pilaOperadores = new Stack<>();
                 String expresionIf ="";
@@ -178,6 +178,7 @@ public class GeneradordeTriplos {
           
           
             }
+            //////
              if (!linea.contains("4if4")) {
         String[] partes = linea.split("=");
         // Realiza alguna acción con las partes aquí
