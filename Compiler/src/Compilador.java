@@ -119,6 +119,7 @@ public class Compilador extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
         Triplito = new javax.swing.JTable();
+        btnNuevo1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
@@ -266,54 +267,58 @@ public class Compilador extends javax.swing.JFrame {
             Triplito.getColumnModel().getColumn(0).setMaxWidth(200);
         }
 
+        btnNuevo1.setText("Optimizar");
+        btnNuevo1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevo1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout rootPanelLayout = new javax.swing.GroupLayout(rootPanel);
         rootPanel.setLayout(rootPanelLayout);
         rootPanelLayout.setHorizontalGroup(
             rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(rootPanelLayout.createSequentialGroup()
                 .addGap(12, 12, 12)
-                .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(rootPanelLayout.createSequentialGroup()
                         .addComponent(buttonsFilePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel1))
+                        .addComponent(jLabel1)
+                        .addGap(195, 195, 195))
                     .addGroup(rootPanelLayout.createSequentialGroup()
                         .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnCompilar)
+                            .addGroup(rootPanelLayout.createSequentialGroup()
+                                .addComponent(btnCompilar)
+                                .addGap(136, 136, 136)
+                                .addComponent(btnNuevo1))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(56, 56, 56)))
                 .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 714, Short.MAX_VALUE)
                         .addComponent(jScrollPane4))
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         rootPanelLayout.setVerticalGroup(
             rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rootPanelLayout.createSequentialGroup()
-                .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(rootPanelLayout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addComponent(buttonsFilePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rootPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addGap(21, 21, 21)))
+                .addGap(33, 33, 33)
+                .addComponent(buttonsFilePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(rootPanelLayout.createSequentialGroup()
                         .addComponent(jScrollPane1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCompilar)
+                        .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnCompilar)
+                            .addComponent(btnNuevo1))
                         .addGap(82, 82, 82))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rootPanelLayout.createSequentialGroup()
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -323,8 +328,16 @@ public class Compilador extends javax.swing.JFrame {
                             .addGroup(rootPanelLayout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE))))
                 .addGap(40, 40, 40))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rootPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE)
+                .addGap(43, 43, 43))
         );
 
         getContentPane().add(rootPanel);
@@ -364,6 +377,12 @@ public class Compilador extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_btnAbrirActionPerformed
+
+    private void btnNuevo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevo1ActionPerformed
+        // TODO add your handling code here:ç
+        System.out.println("esta optimizado");
+        
+    }//GEN-LAST:event_btnNuevo1ActionPerformed
 
     private void compile() {
 
@@ -1098,8 +1117,10 @@ public class Compilador extends javax.swing.JFrame {
        /* for (String linea : lineasSinPrimerasTres) {
          System.out.println(linea);
         }*/
-        //////
+        //aquiiii/////
        GeneradordeTriplos converter = new GeneradordeTriplos();
+       //Optimizacion converter2 = new Optimizacion();
+        //converter2.optimizarCodigo(lineasSinPrimerasTres);
           /*   String[] lineasDeEntrada = {
             "ISC_002 = 414 + 123.4884",
             "ISC_001 = ISC_001 * ISC_009",
@@ -1122,7 +1143,9 @@ for (String arreglotri : arreglotriplos) {
       // Functions.addRowDataInTable(Tablatriplo, Tablatriplos);
          // Agregar los datos de la lista al modelo de tabla
         // Object[] Tablatriplos = new Object[]{ regresotriplo}; 
-         
+        ////////INVOCACION PARA EL METODO//////////////////
+        
+        
         ////////////////////////////////////////////////////////////
     }
     /////////////////////////////////////
@@ -1231,6 +1254,7 @@ for (String arreglotri : arreglotriplos) {
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnGuardarC;
     private javax.swing.JButton btnNuevo;
+    private javax.swing.JButton btnNuevo1;
     private javax.swing.JPanel buttonsFilePanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
