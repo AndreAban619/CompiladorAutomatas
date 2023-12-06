@@ -43,7 +43,7 @@ public class Compilador extends javax.swing.JFrame {
     private Timer timerKeyReleased;
     private boolean codeHasBeenCompiled = false;
     int tamañote = 0;
-
+    String textoOptimizado;
     String[] Lexema = new String[2000];// se guarda el lexema del token
     String[] TOKEN = new String[2000];// Aqui se guarda el token
     int[] LINEA = new int[2000];//aqui la linea
@@ -122,6 +122,7 @@ public class Compilador extends javax.swing.JFrame {
         jScrollPane5 = new javax.swing.JScrollPane();
         Triplito = new javax.swing.JTable();
         btnNuevo1 = new javax.swing.JButton();
+        btnNuevo2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
@@ -276,6 +277,13 @@ public class Compilador extends javax.swing.JFrame {
             }
         });
 
+        btnNuevo2.setText("Reemplazar");
+        btnNuevo2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevo2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout rootPanelLayout = new javax.swing.GroupLayout(rootPanel);
         rootPanel.setLayout(rootPanelLayout);
         rootPanelLayout.setHorizontalGroup(
@@ -292,8 +300,10 @@ public class Compilador extends javax.swing.JFrame {
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(rootPanelLayout.createSequentialGroup()
                                 .addComponent(btnCompilar)
-                                .addGap(136, 136, 136)
-                                .addComponent(btnNuevo1))
+                                .addGap(26, 26, 26)
+                                .addComponent(btnNuevo1)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnNuevo2))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -302,8 +312,7 @@ public class Compilador extends javax.swing.JFrame {
                         .addGap(125, 125, 125)
                         .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, rootPanelLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -335,7 +344,8 @@ public class Compilador extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(rootPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(btnCompilar)
-                                    .addComponent(btnNuevo1))
+                                    .addComponent(btnNuevo1)
+                                    .addComponent(btnNuevo2))
                                 .addGap(82, 82, 82))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rootPanelLayout.createSequentialGroup()
                                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -389,10 +399,29 @@ public class Compilador extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAbrirActionPerformed
 
     private void btnNuevo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevo1ActionPerformed
-        System.out.println("entrooo");
-       SwingUtilities.invokeLater(() -> new Optimizacion(listaLineasSinPrimerasTres)); System.out.println("esta optimizado");
+
+       //SwingUtilities.invokeLater(() -> new Optimizacion(listaLineasSinPrimerasTres));
+       System.out.println("esta optimizado");
+       
+       
+        SwingUtilities.invokeLater(() -> {
+            Optimizacion optimizacionInstance = new Optimizacion(listaLineasSinPrimerasTres);
+
+            // Obtener el texto optimizado y usarlo según sea necesario
+             textoOptimizado = optimizacionInstance.optimizarCodigo(listaLineasSinPrimerasTres);
+            //System.out.println("Texto optimizadooo:\n" + textoOptimizado);
+        });
+       // Optimizacion optimizacionInstance = new Optimizacion(listaLineasSinPrimerasTres);
+
+ // System.out.println("Texto optimizado desde otra clase: " + textoOptimizado);
+       
         
     }//GEN-LAST:event_btnNuevo1ActionPerformed
+
+    private void btnNuevo2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevo2ActionPerformed
+        System.out.println("Texto remplazo:\n" );
+        jtpCode.setText(textoOptimizado);
+    }//GEN-LAST:event_btnNuevo2ActionPerformed
 
     private void compile() {
 
@@ -1124,12 +1153,12 @@ public class Compilador extends javax.swing.JFrame {
             lineasSinPrimerasTres[i - 3] = linea;
             }
            ////////////////
-         listaLineasSinPrimerasTres = Arrays.asList(lineasSinPrimerasTres);
+         listaLineasSinPrimerasTres = Arrays.asList(lineas);
         // Imprimir la lista
        
            /////////////////
         // Imprimir las líneas sin las primeras 3 líneas y sin los puntos y coma
-       /* for (String linea : lineasSinPrimerasTres) {
+       /*for (String linea : lineasSinPrimerasTres) {
          System.out.println(linea);
         }*/
         //aquiiii/////
@@ -1273,6 +1302,7 @@ for (String arreglotri : arreglotriplos) {
     private javax.swing.JButton btnGuardarC;
     private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnNuevo1;
+    private javax.swing.JButton btnNuevo2;
     private javax.swing.JPanel buttonsFilePanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

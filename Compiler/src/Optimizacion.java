@@ -38,7 +38,7 @@ public class Optimizacion extends JFrame {
         setVisible(true);
     }
 
-    public void optimizarCodigo(List<String> codigoos) {
+    public String optimizarCodigo(List<String> codigoos) {
         List<String> codigos = getCodigos(codigoos);
         List<String> antes = new ArrayList<>();
         List<String> despues = new ArrayList<>();
@@ -54,15 +54,24 @@ public class Optimizacion extends JFrame {
             antes.set(i, expresionAntes);
         }
 
-        // Actualizar el área de texto optimizado
+        // Obtener todo el texto del área de texto optimizado
         StringBuilder textoOptimizado = new StringBuilder();
         for (int i = 0; i < antes.size(); i++) {
-              if (antes.get(i).contains("{") || antes.get(i).contains("}") ) {
-                textoOptimizado.append(antes.get(i)).append(" ").append(despues.get(i)).append("\n");  
-              }else
-            textoOptimizado.append(antes.get(i)).append(" = ").append(despues.get(i)).append("\n");
+            if (antes.get(i).contains("{") || antes.get(i).contains("}")) {
+                textoOptimizado.append(antes.get(i)).append(" ").append(despues.get(i)).append("\n");
+            } else {
+                textoOptimizado.append(antes.get(i)).append(" = ").append(despues.get(i)).append("\n");
+            }
+            
         }
+        
+        // Imprimir todo el texto optimizado en la consola
+        //System.out.println("Texto Optimizado:");
+       // System.out.println(textoOptimizado.toString());
+ 
+        // Actualizar el área de texto optimizado
         areaTextoOptimizado.setText(textoOptimizado.toString());
+        return textoOptimizado.toString();
     }
 
     public void procesarCodigos(List<String> codigos, List<String> antes, List<String> despues, Map<String, String> sustituciones) {
@@ -120,6 +129,9 @@ public class Optimizacion extends JFrame {
     }
 
     public static void main(String[] args) {
-
+        // Puedes agregar código para probar la aplicación aquí si lo deseas
+        // Ejemplo:
+        // List<String> codigosDePrueba = Arrays.asList("a = 5", "b = a + 3", "c = b * 2", "{", "int x = 10;", "}", "d = c - 1");
+        // Optimizacion optimizacion = new Optimizacion(codigosDePrueba);
     }
 }
